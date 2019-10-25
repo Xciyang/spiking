@@ -1,0 +1,19 @@
+{
+  "name": "spiking",
+  "version": "1.0.0",
+  "description": "A lightweight spider.",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xciyang/spiking.git"
+  },
+  "author": "Ciyang",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Xciyang/spiking/issues"
+  },
+  "homepage": "https://github.com/Xciyang/spiking#readme"
+}
