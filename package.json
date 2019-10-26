@@ -4,7 +4,7 @@
   "description": "A lightweight spider.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "node ."
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/Xciyang/spiking/issues"
   },
-  "homepage": "https://github.com/Xciyang/spiking#readme"
+  "homepage": "https://github.com/Xciyang/spiking#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "jsdom": "^15.2.0"
+  }
 }
