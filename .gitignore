@@ -36,7 +36,6 @@ build/Release
 node_modules/
 .vscode/
 jspm_packages/
-package-lock.json
 
 # TypeScript v1 declaration files
 typings/
@@ -62,6 +61,7 @@ typings/
 # next.js build output
 .next
 package-lock.json
-package-lock.json
-package-lock.json
-package-lock.json
+
+# Run file
+
+try_download
