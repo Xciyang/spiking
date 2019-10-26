@@ -61,7 +61,3 @@ typings/
 # next.js build output
 .next
 package-lock.json
-
-# Run file
-
-try_download

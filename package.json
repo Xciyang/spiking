@@ -4,7 +4,7 @@
   "description": "A lightweight spider.",
   "main": "index.js",
   "scripts": {
-    "test": "node ."
+    "start": "node ."
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,8 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "jsdom": "^15.2.0"
+    "jsdom": "^15.2.0",
+    "progress": "^2.0.3",
+    "readline-sync": "^1.4.10"
   }
 }

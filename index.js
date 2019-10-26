@@ -1,7 +1,13 @@
+/*
+Copyright © 2019 Ciyang. All rights reserved. 
+*/
+
 const request = require('request');
 const fs = require('fs');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const readlineSync = require('readline-sync');
+const ProgressBar = require('progress');
 
 class UrlTasks {
     constructor(url = '', flag = 1) {
@@ -21,13 +27,15 @@ class UrlTasks {
         this.push(url);
     }
     push(url = '') {
+        var u;
         try {
-            var u = new URL(url, this.firstUrl);
+            u = new URL(url, this.firstUrl);
             url = u.href;
         } catch (error) {
             console.log('error : ' + url);
             return -1;
         }
+        if (this.firstUrl && u.host != this.firstUrl.host) return -1;
         if (this.urlSet.has(url)) return -1;
         this.urlSet.add(url);
         this.waitQueue.push(url);
@@ -84,13 +92,13 @@ class UrlTasks {
                             contentType: response.headers['content-type'],
                             runScripts: "outside-only"
                         });
-                        var aList = dom.window.document.getElementsByTagName('a');
-                        for (const iterator of aList) {
+                        var imgList = dom.window.document.getElementsByTagName('img');
+                        for (const iterator of imgList) {
                             if (iterator.src) tasks.push(iterator.src);
                             if (iterator.href) tasks.push(iterator.href);
                         }
-                        var imgList = dom.window.document.getElementsByTagName('img');
-                        for (const iterator of imgList) {
+                        var aList = dom.window.document.getElementsByTagName('a');
+                        for (const iterator of aList) {
                             if (iterator.src) tasks.push(iterator.src);
                             if (iterator.href) tasks.push(iterator.href);
                         }
@@ -105,13 +113,22 @@ class UrlTasks {
         });
     }
     async workSingle() {
+        var bar = new ProgressBar(' progress [:bar] :now \\ :tot', {
+            complete: '=',
+            incomplete: ' ',
+            width: 100,
+            total: 100
+        });
+        var cnt = 0;
         while (this.waitQueue.length) {
+            bar.update(cnt / (this.waitToDeal + cnt), { now: cnt, tot: this.waitToDeal + cnt });
             var nowUrl = this.waitQueue[0];
             this.waitQueue.shift();
             var res = await this.download(nowUrl, this);
             if (res == 0) console.log('failed : ' + nowUrl);
-            --this.waitToDeal;
+            --this.waitToDeal, ++cnt;
         }
+        bar.update(1);
         var res = this.errorQueue;
         this.errorQueue = '';
         return res;
@@ -123,24 +140,12 @@ function cutRFLF(str = '') {
     return str ? str.replace(/[\r\n]/g, "") : '';
 }
 
-async function read() {
-    return new Promise((resolve, reject) => {
-        process.stdin.on('data', function (chunk) {
-            resolve(chunk);
-        })
-    });
-}
 function programStart() {
-    console.log('<1>Input URL');
-    read().then((res1) => {
-        var newTasks = new UrlTasks(cutRFLF(res1));
-        console.log('<2>Input Local Path');
-        read().then((res2) => {
-            newTasks.setPath(cutRFLF(res2));
-            newTasks.workSingle();
-            console.log('start');
-        });
-    });
+    var res1 = readlineSync.question('<1>Input URL : ');
+    var newTasks = new UrlTasks(cutRFLF(res1));
+    var res2 = readlineSync.question('<2>Input Local Path : ');
+    newTasks.setPath(cutRFLF(res2));
+    newTasks.workSingle();
 }
 
 programStart();
