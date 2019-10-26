@@ -1,4 +1,4 @@
-# spiking
+# Spiking
 
 ![](https://img.shields.io/github/issues/Xciyang/spiking)
 ![](https://img.shields.io/github/forks/Xciyang/spiking)
@@ -13,14 +13,14 @@
 
 A web crawler tool developed using JavaScript.
 
-## 为什么选择它？(Advantage)
+### 为什么选择它？(Advantage)
 
 - 自定义初始链接 Custom initial link
 - 广度有限遍历策略 Breadth first traversal strategy
 - 自动去重 Auto duplicate removal
 - 进度可视化 Progress visualization
 
-## 开始(Getting started)
+### 开始(Getting started)
 
 ```
 git clone https://github.com/Xciyang/spiking.git
@@ -28,7 +28,7 @@ npm install
 npm start
 ```
 
-## 待完成项(To-do list)
+### 待完成项(To-do list)
 
 - 多种筛选方式 Multiple filtering methods
 - 并发/多线程 Concurrent/multithreaded
