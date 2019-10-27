@@ -2,7 +2,6 @@
 Copyright © 2019 Ciyang. All rights reserved. 
 */
 
-const readlineSync = require('readline-sync');
 const request = require('request');
 const fs = require('fs');
 const ProgressBar = require('progress');
@@ -40,7 +39,7 @@ class MultipleTasks {
             url = u.href;
             var tasks = this;
             if (this.firstUrl && u.host != this.firstUrl.host) {
-                request.get(url, requestOpt(), function (error, response, body) {
+                request.get(url, requestOpt(), function (error, response, _body) {
                     if (!error && response.statusCode == 200 && response.headers['content-type'].search('image') != -1)
                         tasks.waitQueue.push(url);
                 });
@@ -62,10 +61,10 @@ class MultipleTasks {
     }
     async download(url = '') {
         if (this.urlSet.has(url))
-            return new Promise((resolve, reject) => { resolve(3); });
+            return new Promise((resolve, _reject) => { resolve(3); });
         this.urlSet.add(url);
         var tasks = this;
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, _reject) => {
             request(url, requestOpt(), function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     if (response.headers['content-type'].search('image') != -1) {
@@ -74,12 +73,10 @@ class MultipleTasks {
                             try {
                                 var strem = fs.createWriteStream(path);
                                 if (strem)
-                                    request.get(url, requestOpt(), function (error2, response2, body2) {
-                                        if (error2)
-                                            setTimeout(downloadImg, 50, url, path);
+                                    request.get(url, function (error2, _response2, _body2) {
+                                        if (error2) setTimeout(downloadImg, 50, url, path);
                                     }).pipe(strem);
-                            }
-                            catch (error) {
+                            } catch (error) {
                                 console.log('An unexpected error when downloading pictures, url : ' + url);
                             }
                         };
@@ -116,7 +113,7 @@ class MultipleTasks {
             });
         });
     }
-    async workMultiple() {
+    async workMultiple(_cb) {
         var bar = new ProgressBar(' progress [:bar] :now \\ :tot Image: :img Error: :err', {
             complete: '=',
             incomplete: ' ',
@@ -128,14 +125,7 @@ class MultipleTasks {
         var loop = function () {
             if (!tasks.runningNum && !tasks.waitQueue.length) {
                 bar.update(1, { now: cnt - tasks.errorQueue.length, tot: cnt, img: cnt2, err: tasks.errorQueue.length });
-                if (tasks.errorQueue.length) {
-                    var res1 = readlineSync.question('Restart <1 | 0> ? :');
-                    if (res1 == 1) {
-                        tasks.waitQueue = tasks.errorQueue;
-                        tasks.errorQueue = new Array();
-                        setTimeout(loop, 100);
-                    }
-                }
+                _cb(tasks);
                 return;
             }
             bar.update(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt), { now: cnt, tot: tasks.waitQueue.length + cnt, img: cnt2, err: tasks.errorQueue.length });

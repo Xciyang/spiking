@@ -2,13 +2,21 @@
 Copyright © 2019 Ciyang. All rights reserved. 
 */
 
-
 const request = require('request');
 const fs = require('fs');
 const ProgressBar = require('progress');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 
+function requestOpt() {
+    return {
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+            'Connection': 'keep-alive'
+        },
+        timeout: 10000
+    };
+}
 class SingleTasks {
     constructor(url = '') {
         this.urlSet = new Set();
@@ -38,20 +46,19 @@ class SingleTasks {
         this.path = path;
     }
     async download(url = '', tasks) {
-        return new Promise((resolve, reject) => {
-            request(url, function (error, response, body) {
+        return new Promise((resolve, _reject) => {
+            request(url, requestOpt(), function (error, response, body) {
                 if (!error && response.statusCode == 200) {
                     if (response.headers['content-type'].search('image') != -1) {
+                        resolve(2);
                         try {
-                            resolve(2);
                             var upath = new URL(url).pathname.split('/').join('_');
                             request.get(url).pipe(fs.createWriteStream(tasks.path + '/' + upath));
                         } catch (e) {
                             console.log('An unexpected error when downloading pictures, url : ' + url);
                         }
-                        return;
                     }
-                    if (response.headers['content-type'].search('text') != -1) {
+                    else if (response.headers['content-type'].search('text') != -1) {
                         const dom = new JSDOM(body, {
                             url: url,
                             contentType: response.headers['content-type'],
@@ -70,38 +77,36 @@ class SingleTasks {
                                 tasks.push(iterator.src);
                             if (iterator.href)
                                 tasks.push(iterator.href);
-                        }
-                    }
-                    resolve(1);
-                    return;
+                        };
+                        resolve(1);
+                    } else resolve(3);
+                } else {
+                    tasks.urlSet.delete(url);
+                    resolve(0);
                 }
-                console.log('request failed, url : ' + url);
-                tasks.errorQueue.push(url);
-                resolve(0);
             });
         });
     }
-    async workSingle() {
-        var bar = new ProgressBar(' progress [:bar] :now \\ :tot :img', {
+    async workSingle(_cb) {
+        var bar = new ProgressBar(' progress [:bar] :now \\ :tot Image: :img Error: :err', {
             complete: '=',
             incomplete: ' ',
-            width: 100,
-            total: 100
+            width: 25,
+            total: 25
         });
         var cnt = 0, cnt2 = 0;
         while (this.waitQueue.length) {
-            bar.update(cnt / (this.waitQueue.length + cnt), { now: cnt, tot: this.waitQueue.length + cnt, img: cnt2 });
+            bar.update(cnt / (this.waitQueue.length + cnt), { now: cnt, tot: this.waitQueue.length + cnt, img: cnt2, err: this.errorQueue.length });
             var nowUrl = this.waitQueue[0];
             this.waitQueue.shift();
             var res = await this.download(nowUrl, this);
-            if (res == 0) console.log('failed download: ' + nowUrl);
+            if (res == 0) this.errorQueue.push(nowUrl);
             if (res == 2) cnt2++;
             ++cnt;
         }
-        bar.update(1, { now: cnt - this.errorQueue.length, tot: this.waitQueue.length + this.errorQueue.length + cnt, img: cnt2 });
-        var res = this.errorQueue;
-        this.errorQueue = '';
-        return res;
+        bar.update(1, { now: cnt - this.errorQueue.length, tot: this.waitQueue.length + this.errorQueue.length + cnt, img: cnt2, err: this.errorQueue.length });
+        _cb(this);
+        return;
     }
 }
 exports.SingleTasks = SingleTasks;
