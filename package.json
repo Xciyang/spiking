@@ -17,11 +17,10 @@
   },
   "homepage": "https://github.com/Xciyang/spiking#readme",
   "dependencies": {
-    "request": "^2.88.0"
-  },
-  "devDependencies": {
+    "request": "^2.88.0",
     "jsdom": "^15.2.0",
     "progress": "^2.0.3",
     "readline-sync": "^1.4.10"
-  }
+  },
+  "devDependencies": {}
 }

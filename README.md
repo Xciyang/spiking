@@ -26,7 +26,9 @@ A web crawler tool developed using JavaScript.
 
 ```
 git clone https://github.com/Xciyang/spiking.git
+
 npm install
+
 npm start
 ```
 
