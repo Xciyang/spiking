@@ -18,7 +18,9 @@ A web crawler tool developed using JavaScript.
 - 自定义初始链接 Custom initial link
 - 广度有限遍历策略 Breadth first traversal strategy
 - 自动去重 Auto duplicate removal
+- 可接受的爬取速度 Acceptable crawl speed
 - 进度可视化 Progress visualization
+- 并发/多线程 Concurrent/multithreaded
 
 ### 开始(Getting started)
 
@@ -31,6 +33,5 @@ npm start
 ### 待完成项(To-do list)
 
 - 多种筛选方式 Multiple filtering methods
-- 并发/多线程 Concurrent/multithreaded
 - 使用Electron框架 Using the electron frame
 - 自定义筛选方式 Custom filtering method
