@@ -16,11 +16,11 @@ A web crawler tool developed using JavaScript.
 ### 为什么选择它？(Advantage)
 
 - 自定义初始链接 Custom initial link
-- 广度有限遍历策略 Breadth first traversal strategy
-- 自动去重 Auto duplicate removal
-- 可接受的爬取速度 Acceptable crawl speed
+- 并发/多线程 Concurrent / multithreaded
+- 广度优先遍历策略 Breadth-first traversal strategy
+- 自动去重 Automatic similarity
+- 可调控的爬取速度 Adjustable crawling speed
 - 进度可视化 Progress visualization
-- 并发/多线程 Concurrent/multithreaded
 
 ### 开始(Getting started)
 
