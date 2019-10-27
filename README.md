@@ -30,6 +30,16 @@ npm install
 npm start
 ```
 
+### 用法(Usage)
+
+```
+Input URL : 
+
+Input Local Path :
+
+Input Concurrency :
+```
+
 ### 待完成项(To-do list)
 
 - 多种筛选方式 Multiple filtering methods
