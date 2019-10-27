@@ -59,9 +59,8 @@ class MultipleTasks {
     setMultipleNum(multiplenum = 10) {
         this.multipleNum = parseInt(multiplenum);
     }
-    async download(url = '') {
-        if (this.urlSet.has(url))
-            return new Promise((resolve, _reject) => { resolve(3); });
+    download(url = '') {
+        if (this.urlSet.has(url)) return new Promise((resolve, _reject) => { resolve(3); });
         this.urlSet.add(url);
         var tasks = this;
         return new Promise((resolve, _reject) => {
@@ -69,21 +68,22 @@ class MultipleTasks {
                 if (!error && response.statusCode == 200) {
                     if (response.headers['content-type'].search('image') != -1) {
                         resolve(2);
-                        var downloadImg = function (url = '', path = '') {
+                        var downloadImg = function (_url = '', _path = '') {
                             try {
-                                var strem = fs.createWriteStream(path);
-                                if (strem)
-                                    request.get(url, function (error2, _response2, _body2) {
-                                        if (error2) setTimeout(downloadImg, 50, url, path);
+                                var strem = fs.createWriteStream(_path);
+                                if (strem) {
+                                    request.get(_url, function (_error, _response, _body) {
+                                        if (_error) setTimeout(downloadImg, 50, _url, _path);
                                     }).pipe(strem);
+                                }
                             } catch (error) {
-                                console.log('An unexpected error when downloading pictures, url : ' + url);
+                                console.log('An unexpected error when downloading pictures, url : ' + _url);
                             }
                         };
                         var upath = new URL(url).pathname.split('/').join('_');
-                        setTimeout(downloadImg, 50, url, tasks.path + '/' + upath);
+                        downloadImg(url, tasks.path + '/' + upath);
                     }
-                    else if (response.headers['content-type'].search('text') != -1) {
+                    else if (!error && response.headers['content-type'].search('text') != -1) {
                         resolve(1);
                         const dom = new JSDOM(body, {
                             url: url,
@@ -105,6 +105,7 @@ class MultipleTasks {
                             if (iterator.href)
                                 tasks.push(iterator.href);
                         }
+                        // ...
                     } else resolve(3);
                 } else {
                     tasks.urlSet.delete(url);
@@ -113,7 +114,7 @@ class MultipleTasks {
             });
         });
     }
-    async workMultiple(_cb) {
+    workMultiple(_cb) {
         var bar = new ProgressBar(' progress [:bar] :now \\ :tot Image: :img Error: :err', {
             complete: '=',
             incomplete: ' ',
@@ -125,35 +126,28 @@ class MultipleTasks {
         var loop = function () {
             if (!tasks.runningNum && !tasks.waitQueue.length) {
                 bar.update(1, { now: cnt - tasks.errorQueue.length, tot: cnt, img: cnt2, err: tasks.errorQueue.length });
-                _cb(tasks);
-                return;
+                return _cb(tasks);
             }
             bar.update(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt), { now: cnt, tot: tasks.waitQueue.length + cnt, img: cnt2, err: tasks.errorQueue.length });
-            if (!tasks.waitQueue.length || tasks.runningNum >= tasks.multipleNum) {
-                setTimeout(loop, 100);
-                return;
-            }
-            var tmpx = Math.min(tasks.waitQueue.length, tasks.multipleNum);
+            if (!tasks.waitQueue.length || tasks.runningNum >= tasks.multipleNum) return setTimeout(loop, 100);
+            var tmpx = Math.min(tasks.waitQueue.length, tasks.multipleNum - tasks.runningNum);
             for (var i = 0; i < tmpx; i++) {
+                ++tasks.runningNum;
                 (function (url = '') {
                     tasks.download(url).then(resp => {
-                        if (resp == 0)
-                            tasks.errorQueue.push(url);
-                        if (resp == 2)
-                            cnt2++;
-                        if (resp != 3)
-                            cnt++;
-                        --tasks.runningNum;
+                        if (resp == 0) tasks.errorQueue.push(url);
+                        if (resp == 2) cnt2++;
+                        if (resp != 3) cnt++;
+                        tasks.runningNum--;
                     });
                 })(tasks.waitQueue[0]);
                 tasks.waitQueue.shift();
-                ++tasks.runningNum;
             }
-            setTimeout(loop, 100);
-            return;
+            return setTimeout(loop, 100);
         };
         setTimeout(loop, 100);
         return;
     }
 }
+
 exports.MultipleTasks = MultipleTasks;

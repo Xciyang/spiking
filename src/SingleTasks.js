@@ -45,7 +45,8 @@ class SingleTasks {
     setPath(path = './') {
         this.path = path;
     }
-    async download(url = '', tasks) {
+    download(url = '') {
+        var tasks = this;
         return new Promise((resolve, _reject) => {
             request(url, requestOpt(), function (error, response, body) {
                 if (!error && response.statusCode == 200) {
@@ -99,14 +100,14 @@ class SingleTasks {
             bar.update(cnt / (this.waitQueue.length + cnt), { now: cnt, tot: this.waitQueue.length + cnt, img: cnt2, err: this.errorQueue.length });
             var nowUrl = this.waitQueue[0];
             this.waitQueue.shift();
-            var res = await this.download(nowUrl, this);
+            var res = await this.download(nowUrl);
             if (res == 0) this.errorQueue.push(nowUrl);
             if (res == 2) cnt2++;
-            ++cnt;
+            if (res != 3) cnt++;
         }
-        bar.update(1, { now: cnt - this.errorQueue.length, tot: this.waitQueue.length + this.errorQueue.length + cnt, img: cnt2, err: this.errorQueue.length });
-        _cb(this);
-        return;
+        bar.update(1, { now: cnt - this.errorQueue.length, tot: cnt, img: cnt2, err: this.errorQueue.length });
+        return _cb(this);
     }
 }
+
 exports.SingleTasks = SingleTasks;
