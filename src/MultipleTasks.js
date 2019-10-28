@@ -1,4 +1,4 @@
-/*
+﻿/*
 Copyright © 2019 Ciyang. All rights reserved. 
 */
 
@@ -7,12 +7,12 @@ const fs = require('fs');
 const ProgressBar = require('progress');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const MD5 = require("crypto-js/MD5");
 
 function requestOpt() {
     return {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
-            'Connection': 'keep-alive'
         },
         timeout: 10000
     };
@@ -26,6 +26,7 @@ class MultipleTasks {
         this.errorQueue = new Array();
         this.runningNum = 0;
         this.finishNum = 0;
+        this.req = request.defaults();
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
@@ -37,16 +38,7 @@ class MultipleTasks {
         try {
             var u = new URL(url, this.firstUrl);
             url = u.href;
-            var tasks = this;
-            if (this.firstUrl && u.host != this.firstUrl.host) {
-                request.get(url, requestOpt(), function (error, response, _body) {
-                    if (!error && response.statusCode == 200 && response.headers['content-type'].search('image') != -1)
-                        tasks.waitQueue.push(url);
-                });
-                return;
-            }
-            if (!this.urlSet.has(url))
-                this.waitQueue.push(url);
+            if (!this.urlSet.has(url)) this.waitQueue.push(url);
         }
         catch (e) {
             console.log('Error URL : ' + url);
@@ -59,31 +51,51 @@ class MultipleTasks {
     setMultipleNum(multiplenum = 10) {
         this.multipleNum = parseInt(multiplenum);
     }
+    setProxy(porxy = '') {
+        try {
+            this.req = request.defaults({
+                'proxy': porxy
+            });;
+        } catch (e) {
+            console.log('I think your should restart the program.');
+        }
+    }
     download(url = '') {
         if (this.urlSet.has(url)) return new Promise((resolve, _reject) => { resolve(3); });
         this.urlSet.add(url);
         var tasks = this;
         return new Promise((resolve, _reject) => {
-            request(url, requestOpt(), function (error, response, body) {
+            tasks.req(url, requestOpt(), function (error, response, body) {
                 if (!error && response.statusCode == 200) {
+                    var u = new URL(url);
+                    if (tasks.firstUrl && u.host != tasks.firstUrl.host && response.headers['content-type'].search('image') == -1) {
+                        resolve(3);
+                        return;
+                    }
                     if (response.headers['content-type'].search('image') != -1) {
                         resolve(2);
                         var downloadImg = function (_url = '', _path = '') {
-                            try {
-                                var strem = fs.createWriteStream(_path);
-                                if (strem) {
-                                    request.get(_url, function (_error, _response, _body) {
-                                        if (_error) setTimeout(downloadImg, 50, _url, _path);
-                                    }).pipe(strem);
-                                }
-                            } catch (error) {
+                            var strem = fs.createWriteStream(_path);
+                            if (strem) {
+                                tasks.req.get(_url, function (_error, _response, _body) {
+                                    if (_error) setTimeout(downloadImg, 50, _url, _path);
+                                }).pipe(strem);
+                            } else {
                                 console.log('An unexpected error when downloading pictures, url : ' + _url);
                             }
-                        };
-                        var upath = new URL(url).pathname.split('/').join('_');
-                        downloadImg(url, tasks.path + '/' + upath);
+                        }
+                        try {
+                            var upath = MD5(response.request.href).toString();
+                            var ctype = response.headers['content-type'];
+                            ctype = ctype.substr(ctype.indexOf('/') + 1);
+                            var res = ctype.indexOf(';');
+                            if (res != -1) ctype = ctype.substr(0, res - 1);
+                            downloadImg(url, tasks.path + '/' + upath + '.' + ctype);
+                        } catch (e) {
+                            console.log('An unexpected error when downloading pictures, url : ' + _url);
+                        }
                     }
-                    else if (!error && response.headers['content-type'].search('text') != -1) {
+                    else if (response.headers['content-type'].search('text') != -1) {
                         resolve(1);
                         const dom = new JSDOM(body, {
                             url: url,
@@ -106,7 +118,9 @@ class MultipleTasks {
                                 tasks.push(iterator.href);
                         }
                         // ...
-                    } else resolve(3);
+                    } else {
+                        resolve(3);
+                    }
                 } else {
                     tasks.urlSet.delete(url);
                     resolve(0);

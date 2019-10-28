@@ -12,8 +12,8 @@ function cutRFLF(str = '') {
 
 function finishWork(tasks) {
     if (tasks.errorQueue && tasks.errorQueue.length) {
-        var res1 = readlineSync.question('Restart < 1 | 0 > : ');
-        if (cutRFLF(res1) == 1) {
+        var res1 = readlineSync.keyInYN('Restart : ');
+        if (res1) {
             tasks.waitQueue = tasks.errorQueue;
             tasks.errorQueue = new Array();
             tasks.workMultiple(finishWork);
@@ -28,6 +28,11 @@ function programStart() {
     newTasks.setPath(cutRFLF(res2));
     var res3 = readlineSync.question('<3>Input Concurrency : ');
     newTasks.setMultipleNum(cutRFLF(res3));
+    var res4 = readlineSync.keyInYN('<4>Input Use Proxy or Not  : ');
+    if (res4) {
+        var res5 = readlineSync.question('<5>Input Proxy : ');
+        newTasks.setProxy(cutRFLF(res5));
+    }
     console.log('Initialization tasks to complete.');
     newTasks.workMultiple(finishWork);
 }
