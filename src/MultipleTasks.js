@@ -30,7 +30,7 @@ class MultipleTasks {
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
-            console.log('I think your should restart the program.');
+            console.log('URL parsing error.');
         }
         this.push(url);
     }
@@ -39,8 +39,7 @@ class MultipleTasks {
             var u = new URL(url, this.firstUrl);
             url = u.href;
             if (!this.urlSet.has(url)) this.waitQueue.push(url);
-        }
-        catch (e) {
+        } catch (e) {
             console.log('Error URL : ' + url);
         }
         return;
@@ -57,7 +56,7 @@ class MultipleTasks {
                 'proxy': porxy
             });;
         } catch (e) {
-            console.log('I think your should restart the program.');
+            console.log('Proxy error.');
         }
     }
     download(url = '') {

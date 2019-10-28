@@ -26,8 +26,8 @@ function programStart() {
     var newTasks = new MultipleTasks(cutRFLF(res1));
     var res2 = readlineSync.question('<2>Input Local Path : ');
     newTasks.setPath(cutRFLF(res2));
-    var res3 = readlineSync.question('<3>Input Concurrency : ');
-    newTasks.setMultipleNum(cutRFLF(res3));
+    var res3 = readlineSync.questionInt('<3>Input Concurrency : ');
+    newTasks.setMultipleNum(res3);
     var res4 = readlineSync.keyInYN('<4>Input Use Proxy or Not  : ');
     if (res4) {
         var res5 = readlineSync.question('<5>Input Proxy : ');
