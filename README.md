@@ -34,17 +34,28 @@ npm start
 
 ### 用法(Usage)
 
-```
-Input URL : 
+当你`start`后依次进行下列操作。
 
-Input Local Path :
+Do the following after `start`.
 
-Input Concurrency :
-```
+1. Input URL
+2. Input Local Path
+3. Input Concurrency
+4. Input Use Proxy or Not
+5. Input Proxy(optional)
+
+然后爬取会自动开始。
+
+Then the crawl will start automatically.
+
+当一切结束后可以重试请求失败的链接。
+
+When everything is done you can retry the failed link request.
+
 
 ### 待完成项(To-do list)
 
-- 无头浏览器 Headless browser
+- 无头浏览器支持 Headless browser support
 - 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
 - 使用Electron框架 Using the electron frame
