@@ -27,6 +27,7 @@ class MultipleTasks {
         this.runningNum = 0;
         this.finishNum = 0;
         this.req = request.defaults();
+        this.normalImgQueue = new Array();
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
@@ -39,6 +40,16 @@ class MultipleTasks {
             var u = new URL(url, this.firstUrl);
             url = u.href;
             if (!this.urlSet.has(url)) this.waitQueue.push(url);
+        } catch (e) {
+            console.log('Error URL : ' + url);
+        }
+        return;
+    }
+    pushImg(url = '') {
+        try {
+            var u = new URL(url, this.firstUrl);
+            url = u.href;
+            if (!this.urlSet.has(url)) this.normalImgQueue.push(url);
         } catch (e) {
             console.log('Error URL : ' + url);
         }
@@ -105,7 +116,7 @@ class MultipleTasks {
                         var imgList = dom.window.document.getElementsByTagName('img');
                         for (const iterator of imgList) {
                             if (iterator.src)
-                                tasks.push(iterator.src);
+                                tasks.pushImg(iterator.src);
                             if (iterator.href)
                                 tasks.push(iterator.href);
                         }
@@ -119,6 +130,47 @@ class MultipleTasks {
                         // ...
                     } else {
                         resolve(3);
+                    }
+                } else {
+                    tasks.urlSet.delete(url);
+                    resolve(0);
+                }
+            });
+        });
+    }
+    downloadImg(url = '') {
+        if (this.urlSet.has(url)) return new Promise((resolve, reject) => { resolve(3); });
+        this.urlSet.add(url);
+        var tasks = this;
+        return new Promise((resolve, reject) => {
+            tasks.req(url, requestOpt(), function (error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    if (response.headers['content-type'].search('image') == -1) {
+                        tasks.urlSet.delete(url);
+                        tasks.push(url);
+                        resolve(3);
+                        return;
+                    }
+                    resolve(2);
+                    var downloadImg = function (_url = '', _path = '') {
+                        var strem = fs.createWriteStream(_path);
+                        if (strem) {
+                            tasks.req.get(_url, function (_error, r, b) {
+                                if (_error) setTimeout(downloadImg, 50, _url, _path);
+                            }).pipe(strem);
+                        } else {
+                            console.log('An unexpected error when downloading pictures, url : ' + _url);
+                        }
+                    }
+                    try {
+                        var upath = MD5(response.request.href).toString();
+                        var ctype = response.headers['content-type'];
+                        ctype = ctype.substr(ctype.indexOf('/') + 1);
+                        var res = ctype.indexOf(';');
+                        if (res != -1) ctype = ctype.substr(0, res - 1);
+                        downloadImg(url, tasks.path + '/' + upath + '.' + ctype);
+                    } catch (e) {
+                        console.log('An unexpected error when downloading pictures, url : ' + url);
                     }
                 } else {
                     tasks.urlSet.delete(url);
@@ -142,7 +194,18 @@ class MultipleTasks {
                 return _cb(tasks);
             }
             bar.update(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt), { now: cnt, tot: tasks.waitQueue.length + cnt, img: cnt2, err: tasks.errorQueue.length });
-            if (!tasks.waitQueue.length || tasks.runningNum >= tasks.multipleNum) return setTimeout(loop, 100);
+            if ((!tasks.waitQueue.length && !tasks.normalImgQueue.length) || tasks.runningNum >= tasks.multipleNum) return setTimeout(loop, 100);
+            var tmpy = Math.min(tasks.normalImgQueue.length, tasks.multipleNum);
+            for (var i = 0; i < tmpy; i++) {
+                (function (url = '') {
+                    tasks.downloadImg(url).then(resp => {
+                        if (resp == 0) tasks.errorQueue.push(url);
+                        if (resp == 2) cnt2++;
+                        if (resp != 3) cnt++;
+                    });
+                })(tasks.normalImgQueue[0]);
+                tasks.normalImgQueue.shift();
+            }
             var tmpx = Math.min(tasks.waitQueue.length, tasks.multipleNum - tasks.runningNum);
             for (var i = 0; i < tmpx; i++) {
                 ++tasks.runningNum;

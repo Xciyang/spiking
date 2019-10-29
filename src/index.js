@@ -4,7 +4,7 @@ Copyright © 2019 Ciyang. All rights reserved.
 
 const readlineSync = require('readline-sync');
 const { SingleTasks } = require("./SingleTasks");
-const { MultipleTasks } = require("./DynamicMultipleTasks");
+const { MultipleTasks } = require("./MultipleTasks");
 const { DynamicMultipleTasks } = require("./DynamicMultipleTasks");
 
 function cutRFLF(str = '') {
@@ -23,21 +23,52 @@ function finishWork(tasks) {
         readlineSync.keyInPause('EXIT');
     }
 }
-
-function programStart() {
-    var res1 = readlineSync.question('<1>Input URL : ');
-    var newTasks = new MultipleTasks(cutRFLF(res1));
-    var res2 = readlineSync.question('<2>Input Local Path : ');
+function DynamicStart(params) {
+    var res1 = readlineSync.question('<2>Input URL : ');
+    var newTasks = new DynamicMultipleTasks(cutRFLF(res1));
+    var res2 = readlineSync.question('<3>Input Local Path : ');
     newTasks.setPath(cutRFLF(res2));
-    var res3 = readlineSync.questionInt('<3>Input Concurrency : ');
+    var res3 = readlineSync.questionInt('<4>Input Concurrency : ');
     newTasks.setMultipleNum(res3);
-    var res4 = readlineSync.keyInYNStrict('<4>Input Use Proxy or Not  : ');
+    var res6 = readlineSync.keyInYNStrict('<5>Input Display Window : ');
+    newTasks.setDisplay(res6);
+    var res4 = readlineSync.keyInYNStrict('<6>Input Use Proxy or Not  : ');
     if (res4) {
-        var res5 = readlineSync.question('<5>Input Proxy : ');
+        var res5 = readlineSync.question('<7>Input Proxy : ');
         newTasks.setProxy(cutRFLF(res5));
     }
     console.log('Initialization tasks to complete.');
     newTasks.workMultiple(finishWork);
+}
+function MultipleStart() {
+    var res1 = readlineSync.question('<2>Input URL : ');
+    var newTasks = new MultipleTasks(cutRFLF(res1));
+    var res2 = readlineSync.question('<3>Input Local Path : ');
+    newTasks.setPath(cutRFLF(res2));
+    var res3 = readlineSync.questionInt('<4>Input Concurrency : ');
+    newTasks.setMultipleNum(res3);
+    var res4 = readlineSync.keyInYNStrict('<5>Input Use Proxy or Not  : ');
+    if (res4) {
+        var res5 = readlineSync.question('<6>Input Proxy : ');
+        newTasks.setProxy(cutRFLF(res5));
+    }
+    console.log('Initialization tasks to complete.');
+    newTasks.workMultiple(finishWork);
+}
+
+function programStart() {
+    while (true) {
+        var res = readlineSync.question('<1>Input Way [Multiple(m)/Dynamic(d)]: ');
+        if (res == 'm' || res == 'Multiple') {
+            MultipleStart();
+            break;
+        } else if (res == 'd' || res == 'Dynamic') {
+            DynamicStart();
+            break;
+        } else {
+            console.log('Wrong way.');
+        }
+    }
 }
 
 programStart();
