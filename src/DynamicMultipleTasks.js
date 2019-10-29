@@ -34,6 +34,7 @@ class DynamicMultipleTasks {
         this.browserRunning = 0;
         this.normalImgQueue = new Array();
         this.displayWindow = true;
+        this.chromePath = '';
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
@@ -79,6 +80,9 @@ class DynamicMultipleTasks {
     }
     setDisplay(disp = true) {
         this.displayWindow = disp;
+    }
+    setChromePath(path = '') {
+        this.chromePath = path;
     }
     loadDynamically(url = '') {
         var tasks = this;
@@ -247,7 +251,7 @@ class DynamicMultipleTasks {
                 console.log('Create browser');
                 tasks.browserCreating = 1;
                 var opt = {
-                    executablePath: 'D:/Ciyang/.local-chromium/win64-706915/chrome-win/chrome.exe',
+                    executablePath: this.chromePath,
                     headless: !tasks.displayWindow
                 };
                 // if (tasks.proxy) opt.args = ['--proxy-server=' + tasks.proxy];

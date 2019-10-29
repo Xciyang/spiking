@@ -30,12 +30,14 @@ function DynamicStart(params) {
     newTasks.setPath(cutRFLF(res2));
     var res3 = readlineSync.questionInt('<4>Input Concurrency : ');
     newTasks.setMultipleNum(res3);
-    var res6 = readlineSync.keyInYNStrict('<5>Input Display Window : ');
-    newTasks.setDisplay(res6);
-    var res4 = readlineSync.keyInYNStrict('<6>Input Use Proxy or Not  : ');
-    if (res4) {
-        var res5 = readlineSync.question('<7>Input Proxy : ');
-        newTasks.setProxy(cutRFLF(res5));
+    var res4 = readlineSync.question('<5>Input Chrome Path : ');
+    newTasks.setChromePath(res4);
+    var res5 = readlineSync.keyInYNStrict('<6>Input Display Window : ');
+    newTasks.setDisplay(res5);
+    var res6 = readlineSync.keyInYNStrict('<7>Input Use Proxy or Not  : ');
+    if (res6) {
+        var res7 = readlineSync.question('<8>Input Proxy : ');
+        newTasks.setProxy(cutRFLF(res7));
     }
     console.log('Initialization tasks to complete.');
     newTasks.workMultiple(finishWork);
