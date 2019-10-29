@@ -16,6 +16,10 @@ Do the following after `start`.
 
 `Input Chormo` Enter the Chormo browser executable file.
 
+`Input Chormo` Enter the Chormo browser executable file.
+
+`Input Login or Not` Enter whether you want to log in.
+
 Then the crawl will start automatically.
 
 When everything is done you can retry the failed link request.

@@ -16,6 +16,8 @@
 
 `Input Chormo Path`输入Chormo浏览器可执行文件。
 
+`Input Login or Not` 输入你是否要登录。
+
 然后爬取会自动开始。
 
 当一切结束后可以重试请求失败的链接。
