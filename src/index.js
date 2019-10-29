@@ -20,7 +20,7 @@ function finishWork(tasks) {
             tasks.workMultiple(finishWork);
         }
     } else {
-        readlineSync.keyInPause('EXIT');
+        readlineSync.keyInPause('EXIT ? ');
     }
 }
 function DynamicStart(params) {
@@ -39,8 +39,27 @@ function DynamicStart(params) {
         var res7 = readlineSync.question('<8>Input Proxy : ');
         newTasks.setProxy(cutRFLF(res7));
     }
-    console.log('Initialization tasks to complete.');
-    newTasks.workMultiple(finishWork);
+    if (res5) {
+        var res8 = readlineSync.keyInYNStrict('<9>Input Login or Not : ');
+        if (res8) {
+            newTasks.openBrowser().then(res => {
+                newTasks.loadDynamically(newTasks.firstUrl.href).then(res => {
+                    readlineSync.keyInPause('FINISH ? ');
+                    console.log('Initialization tasks to complete.');
+                    newTasks.workMultiple(finishWork);
+                });
+            }).catch(e => { 
+
+            });
+
+        } else {
+            console.log('Initialization tasks to complete.');
+            newTasks.workMultiple(finishWork);
+        }
+    } else {
+        console.log('Initialization tasks to complete.');
+        newTasks.workMultiple(finishWork);
+    }
 }
 function MultipleStart() {
     var res1 = readlineSync.question('<2>Input URL : ');

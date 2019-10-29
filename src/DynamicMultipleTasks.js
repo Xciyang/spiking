@@ -84,6 +84,41 @@ class DynamicMultipleTasks {
     setChromePath(path = '') {
         this.chromePath = path;
     }
+    openBrowser() {
+        var tasks = this;
+        if (!tasks.browserRunning) {
+            console.log('Create browser');
+            tasks.browserCreating = 1;
+            var opt = {
+                executablePath: tasks.chromePath,
+                headless: !tasks.displayWindow
+            };
+            // if (tasks.proxy) opt.args = ['--proxy-server=' + tasks.proxy];
+            return new Promise((resolve, reject) => {
+                puppeteer.launch(opt).then(res => {
+                    tasks.browser = res;
+                    tasks.browser.newPage().then(res2 => {
+                        tasks.page = res2;
+                        tasks.browserRunning = 1;
+                        tasks.browserCreating = 0;
+                        resolve(0);
+                    }).catch(err => {
+                        console.log('Browser page error');
+                        this.browser.close().then(res => {
+                            tasks.browserCreating = 0;
+                        }).catch(err => {
+                            tasks.browserCreating = 0;
+                        });
+                        resolve(0);
+                    });
+                }).catch(err => {
+                    tasks.browserCreating = 0;
+                    console.log('Browser error');
+                    resolve(0);
+                });
+            });
+        }
+    }
     loadDynamically(url = '') {
         var tasks = this;
         return new Promise((resolve, reject) => {
@@ -236,7 +271,7 @@ class DynamicMultipleTasks {
             });
         });
     }
-    workMultiple(_cb, _login) {
+    workMultiple(_cb) {
         var bar = new ProgressBar(' progress [:bar] :now \\ :tot Image: :img Error: :err', {
             complete: '=',
             incomplete: ' ',
@@ -251,7 +286,7 @@ class DynamicMultipleTasks {
                 console.log('Create browser');
                 tasks.browserCreating = 1;
                 var opt = {
-                    executablePath: this.chromePath,
+                    executablePath: tasks.chromePath,
                     headless: !tasks.displayWindow
                 };
                 // if (tasks.proxy) opt.args = ['--proxy-server=' + tasks.proxy];
