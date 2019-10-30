@@ -24,6 +24,6 @@ Then the crawl will start automatically.
 
 When everything is done you can retry the failed link request.
 
-## 详细
+## More
 
 When you choose the `Dynamic` mode, you not only need to enter the correct proxy address in the program, but also need to change the IE proxy.

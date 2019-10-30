@@ -99,7 +99,7 @@ class MultipleTasks {
                             var ctype = response.headers['content-type'];
                             ctype = ctype.substr(ctype.indexOf('/') + 1);
                             var res = ctype.indexOf(';');
-                            if (res != -1) ctype = ctype.substr(0, res - 1);
+                            if (res != -1) ctype = ctype.substr(0, res);
                             downloadImg(url, tasks.path + '/' + upath + '.' + ctype);
                         } catch (e) {
                             console.log('An unexpected error when downloading pictures, url : ' + _url);
