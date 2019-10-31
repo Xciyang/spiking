@@ -49,9 +49,8 @@ function DynamicStart(params) {
                     newTasks.workMultiple(finishWork);
                 });
             }).catch(e => { 
-
+                
             });
-
         } else {
             console.log('Initialization tasks to complete.');
             newTasks.workMultiple(finishWork);

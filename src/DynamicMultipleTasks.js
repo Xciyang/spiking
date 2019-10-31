@@ -29,12 +29,12 @@ class DynamicMultipleTasks {
         this.runningNum = 0;
         this.finishNum = 0;
         this.req = request.defaults();
-        this.browserInUsing = 0;
         this.browserCreating = 0;
         this.browserRunning = 0;
         this.normalImgQueue = new Array();
         this.displayWindow = true;
         this.chromePath = '';
+        this.pageList = new Array();
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
@@ -84,6 +84,18 @@ class DynamicMultipleTasks {
     setChromePath(path = '') {
         this.chromePath = path;
     }
+    newPage() {
+        return new Promise((resolve, reject) => {
+            this.browser.newPage().then(res => {
+                resolve({
+                    page: res,
+                    inUsing: 0
+                });
+            }).catch(err => {
+                reject('error');
+            });
+        })
+    }
     openBrowser() {
         var tasks = this;
         if (!tasks.browserRunning) {
@@ -97,67 +109,62 @@ class DynamicMultipleTasks {
             return new Promise((resolve, reject) => {
                 puppeteer.launch(opt).then(res => {
                     tasks.browser = res;
-                    tasks.browser.newPage().then(res2 => {
-                        tasks.page = res2;
-                        tasks.browserRunning = 1;
+                    tasks.browserRunning = 1;
+                    tasks.newPage().then(res2 => {
+                        tasks.pageList.push(res2);
                         tasks.browserCreating = 0;
                         resolve(0);
-                    }).catch(err => {
-                        console.log('Browser page error');
+                    }).catch(err2 => {
                         this.browser.close().then(res => {
                             tasks.browserCreating = 0;
                         }).catch(err => {
                             tasks.browserCreating = 0;
                         });
-                        resolve(0);
+                        reject(0);
                     });
                 }).catch(err => {
                     tasks.browserCreating = 0;
                     console.log('Browser error');
-                    resolve(0);
+                    reject(0);
                 });
             });
         }
+        return new Promise((resolve, reject) => { resolve(0) })
     }
     loadDynamically(url = '') {
         var tasks = this;
         return new Promise((resolve, reject) => {
-            function useBrowser() {
-                if (!tasks.browserInUsing) {
-                    ++tasks.browserInUsing;
-                    if (tasks.browserInUsing > 1) {
-                        throw new Error("There is a problem with the code.");
-                    }
-                    tasks.page.goto(url, {
-                        waitUntil: 'networkidle2', timeout: 10000
-                    }).then(res => {
-                        tasks.page.content().then(res2 => {
-                            --tasks.browserInUsing;
+            (function useBrowser() {
+                for (var i = 0; i < tasks.pageList.length; i++) {
+                    if (tasks.pageList[i].inUsing) continue;
+                    ++tasks.pageList[i].inUsing;
+                    if (tasks.pageList[i].inUsing > 1) throw new Error("There is a problem with the code.");
+                    tasks.pageList[i].page.goto(url, { waitUntil: 'networkidle2', timeout: 10000 }).then(res => {
+                        tasks.pageList[i].page.content().then(res2 => {
+                            --tasks.pageList[i].inUsing;
                             resolve(res2);
-                        }).catch(e => {
+                        }).catch(err => {
                             console.log('An unexpected error when downloading pictures, url : ' + url);
                         });
                     }).catch(err => {
                         if (err instanceof TimeoutError) {
-                            tasks.page.content().then(res2 => {
-                                --tasks.browserInUsing;
+                            tasks.pageList[i].page.content().then(res2 => {
+                                --tasks.pageList[i].inUsing;
                                 resolve(res2);
                             }).catch(err => {
                                 console.log('An unexpected error when downloading pictures, url : ' + url);
-                                --tasks.browserInUsing;
-                                resolve(0);
+                                --tasks.pageList[i].inUsing;
+                                reject(0);
                             });
-                        } else {
-                            --tasks.browserInUsing;
-                            resolve(0);
+                            return;
                         }
+                        --tasks.pageList[i].inUsing;
+                        reject(0);
                     });
-                } else {
-                    setTimeout(useBrowser, 200);
+                    return;
                 }
-                return;
-            }
-            useBrowser();
+                setTimeout(useBrowser, 100);
+            })();
         });
     }
     download(url = '') {
@@ -197,28 +204,25 @@ class DynamicMultipleTasks {
                     }
                     else if (response.headers['content-type'].search('text') != -1) {
                         tasks.loadDynamically(url).then(res => {
-                            if (res == 0) {
-                                tasks.urlSet.delete(url);
-                                resolve(0);
+                            resolve(1);
+                            var dom = new JSDOM(res);
+                            var imgList = dom.window.document.getElementsByTagName('img');
+                            for (const iterator of imgList) {
+                                if (iterator.src)
+                                    tasks.pushImg(iterator.src);
+                                if (iterator.href)
+                                    tasks.push(iterator.href);
                             }
-                            else {
-                                resolve(1);
-                                var dom = new JSDOM(res);
-                                var imgList = dom.window.document.getElementsByTagName('img');
-                                for (const iterator of imgList) {
-                                    if (iterator.src)
-                                        tasks.pushImg(iterator.src);
-                                    if (iterator.href)
-                                        tasks.push(iterator.href);
-                                }
-                                var aList = dom.window.document.getElementsByTagName('a');
-                                for (const iterator of aList) {
-                                    if (iterator.src)
-                                        tasks.push(iterator.src);
-                                    if (iterator.href)
-                                        tasks.push(iterator.href);
-                                }
+                            var aList = dom.window.document.getElementsByTagName('a');
+                            for (const iterator of aList) {
+                                if (iterator.src)
+                                    tasks.push(iterator.src);
+                                if (iterator.href)
+                                    tasks.push(iterator.href);
                             }
+                        }).catch(err => {
+                            tasks.urlSet.delete(url);
+                            resolve(0);
                         });
                     } else {
                         resolve(3);
@@ -278,38 +282,8 @@ class DynamicMultipleTasks {
             width: 25,
             total: 25
         });
-        var cnt = 0, cnt2 = 0;
-        var tasks = this;
+        var cnt = 0, cnt2 = 0, tasks = this;
         var loop = function () {
-            if (!tasks.browserRunning) {
-                if (tasks.browserCreating) return setTimeout(loop, 100);
-                console.log('Create browser');
-                tasks.browserCreating = 1;
-                var opt = {
-                    executablePath: tasks.chromePath,
-                    headless: !tasks.displayWindow
-                };
-                // if (tasks.proxy) opt.args = ['--proxy-server=' + tasks.proxy];
-                puppeteer.launch(opt).then(res => {
-                    tasks.browser = res;
-                    tasks.browser.newPage().then(res2 => {
-                        tasks.page = res2;
-                        tasks.browserRunning = 1;
-                        tasks.browserCreating = 0;
-                    }).catch(err => {
-                        console.log('Browser page error');
-                        this.browser.close().then(res => {
-                            tasks.browserCreating = 0;
-                        }).catch(err => {
-                            tasks.browserCreating = 0;
-                        });
-                    });
-                }).catch(err => {
-                    tasks.browserCreating = 0;
-                    console.log('Browser error');
-                });
-                return setTimeout(loop, 100);
-            }
             if (!tasks.runningNum && !tasks.waitQueue.length) {
                 bar.update(1, { now: cnt - tasks.errorQueue.length, tot: cnt, img: cnt2, err: tasks.errorQueue.length });
                 tasks.browser.close().then(res => { _cb(tasks); });
@@ -343,7 +317,28 @@ class DynamicMultipleTasks {
             }
             return setTimeout(loop, 100);
         };
-        setTimeout(loop, 100);
+        var initPage = function () {
+            for (var i = tasks.pageList.length; i < tasks.multipleNum; i++) {
+                tasks.newPage().then(res2 => {
+                    tasks.pageList.push(res2);
+                    if (tasks.pageList.length == tasks.multipleNum) setTimeout(loop, 100);
+                }).catch(err => {
+                    console.log('Browser page error');
+                    tasks.browser.close().then(res => {
+                        tasks.browserRunning = 0;
+                        _cb(tasks);
+                    }).catch(err => {
+                        tasks.browserRunning = 0;
+                        _cb(tasks);
+                    });
+                });
+            }
+        }
+        tasks.openBrowser().then(res => {
+            initPage();a
+        }).catch(err => {
+            console.log('error');
+        });
         return;
     }
     close() {
