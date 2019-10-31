@@ -335,7 +335,7 @@ class DynamicMultipleTasks {
             }
         }
         tasks.openBrowser().then(res => {
-            initPage();a
+            initPage();
         }).catch(err => {
             console.log('error');
         });
