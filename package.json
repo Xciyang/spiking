@@ -1,0 +1,27 @@
+{
+  "name": "spiking",
+  "version": "2.0.0",
+  "description": "A lightweight web crawler.",
+  "main": "app/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xciyang/spiking.git"
+  },
+  "keywords": [
+    "Electron",
+    "crawler",
+    "nodejs"
+  ],
+  "author": "Ciyang",
+  "license": "MPL-2.0",
+  "homepage": "https://github.com/Xciyang/spiking#readme",
+  "devDependencies": {},
+  "dependencies": {
+    "electron": "^6.1.2",
+    "crypto-js": "^3.1.9-1",
+    "jsdom": "^15.2.0"
+  }
+}

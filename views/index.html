@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Spiking</title>
+  <link rel="stylesheet" href="./bootstrap.min.css" />
+</head>
+<style>
+  @keyframes move {
+    0% {
+      background-position: 0 0;
+    }
+
+    100% {
+      background-position: -500px 0;
+    }
+  }
+
+  .colorful {
+    background-image: linear-gradient(to right, red, orange, yellow, green, yellow, orange, red, orange, yellow, green, yellow, orange, red);
+    -webkit-background-clip: text;
+    animation: move +10s infinite;
+    color: transparent;
+    text-align: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  }
+
+  .form-control {
+    background-color: transparent;
+  }
+
+  .form-control:focus {
+    background-color: transparent;
+  }
+
+  body {
+    overflow: scroll;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+</style>
+
+<body style="background: url(./bg.png) no-repeat fixed top;background-size: 100%;" href='#top'>
+  <div class="container-fluid">
+    <h2 class="colorful"> Spiking </h2>
+    <hr />
+    <div class="alert alert-danger" role="alert" id="ErrorMessage" style="display: none">
+    </div>
+    <div class="container-fluid">
+    </div>
+    <div class="btn-group btn-group-sm input-group" data-toggle="buttons" style="width: 100%" id="basic-way">
+      <label class="btn btn-primary">
+        <input type="radio" name="options" onclick="showMultipleContainer()">
+        Multiple
+      </label>
+      <label class="btn btn-primary">
+        <input type="radio" name="options" onclick="showDynamicContainer()">
+        DynamicMultiple
+      </label>
+    </div>
+    <div class="container-fluid">
+      <label for="basic-url">URL</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="basic-url" placeholder="Example : https://example.com">
+      </div>
+      <label for="basic-path">Local Path</label>
+      <div class="input-group">
+        <input type="file" class="form-control" id="basic-path"
+          onchange="document.getElementById('basic-path-button').innerText = this.files[0].path" webkitdirectory
+          directory style="display: none">
+        <button type="button" class="btn btn-info" id="basic-path-button"
+          onclick="document.getElementById('basic-path').click()"> Choose Local Path </button>
+      </div>
+      <label for="basic-concurrency">Concurrency</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="basic-concurrency" placeholder="Example : 10">
+      </div>
+      <label for="basic-proxy">Proxy</label>
+      <div class="input-group">
+        <input type="text" class="form-control" id="basic-proxy" placeholder="Example : http://localhost:1080/">
+      </div>
+    </div>
+    <div class="container-fluid" id="MultipleContainer" style="display: none">
+      <div class="input-group">
+        <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
+          onclick="MultipleStart()">Start</button>
+      </div>
+    </div>
+    <div class="container-fluid" id="DynamicContainer" style="display: none">
+      <label for="basic-chrome">Chrome Path</label>
+      <div class="input-group">
+        <input type="file" class="form-control" id="basic-chrome"
+          onchange="document.getElementById('basic-chrome-button').innerText = this.files[0].path"
+          style="display: none">
+        <button type="button" class="btn btn-info" id="basic-chrome-button"
+          onclick="document.getElementById('basic-chrome').click()"> Choose Chrome Path </button>
+      </div>
+      <label for="basic-more">More</label>
+      <div class="btn-group input-group" data-toggle="buttons" id="basic-more">
+        <label class="btn">
+          <input type="checkbox" id="basic-display" class="input-group">
+          Display
+        </label>
+        <label class="btn">
+          <input type="checkbox" id="basic-login" class="input-group">
+          Login(Need Display)
+        </label>
+      </div>
+      <div class="input-group">
+        <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
+          onclick="DynamicStart()">Start</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="./index.js"></script>
+
+</html>
