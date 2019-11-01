@@ -10,8 +10,17 @@ function TasksContinue() {
     main.TasksContinue();
 }
 
+function TasksRetry() {
+    main.TasksRetry();
+}
+
 ipcRenderer.on('setContinue', (event, arg) => {
     document.getElementById('TasksContinue').style.display = '';
+});
+
+ipcRenderer.on('setRetry', (event, arg) => {
+    document.getElementById('ErrorNum').innerText = arg;
+    document.getElementById('TasksRetry').style.display = '';
 });
 
 // ipcRenderer.on('displayReset', (event, arg) => {

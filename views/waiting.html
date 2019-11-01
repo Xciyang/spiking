@@ -40,11 +40,18 @@
         <h2 class="colorful"> Spiking </h2>
         <hr />
     </div>
-    <div class="container-fluid" style="text-align: center">
-        <a>waitting...</a>
+    <div class="container-fluid" style="text-align: center" id="TasksContinue" style="display: none">
+        <a>Waiting...</a>
         <div class="input-group">
-            <button type="button" id="TasksContinue" class="btn btn-success" style="width: 100%;margin-top: 1%"
+            <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
                 onclick="TasksContinue()">Continue</button>
+        </div>
+    </div>
+    <div class="container-fluid" style="text-align: center" id="TasksRetry" style="display: none">
+        <a>Retry the error list ? Error Num : </a><a id="ErrorNum"></a>
+        <div class="input-group">
+            <button type="button" class="btn btn-info" style="width: 100%;margin-top: 1%"
+                onclick="TasksRetry()">Retry</button>
         </div>
     </div>
 </body>
