@@ -3,8 +3,7 @@ Copyright © 2019 Ciyang. All rights reserved.
 */
 const request = require('request');
 const fs = require('fs');
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+const { JSDOM } = require("jsdom");
 const MD5 = require("crypto-js/MD5");
 const { BrowserWindow } = require('electron')
 
@@ -187,8 +186,7 @@ class MultipleTasks {
     workMultiple(_cb) {
         this.stop = 0;
         this.mainWindow.setProgressBar(2);
-        var cnt = 0, cnt2 = 0;
-        var tasks = this;
+        var cnt = 0, cnt2 = 0, tasks = this;
         var loop = function () {
             if (tasks.stop) return;
             tasks.mainWindow.webContents.send('setProgress', {
@@ -199,8 +197,9 @@ class MultipleTasks {
             tasks.mainWindow.webContents.send('setErrorNum', tasks.errorQueue.length);
             if (!tasks.runningNum && !tasks.waitQueue.length) {
                 tasks.mainWindow.setProgressBar(-1);
-                tasks.stop = 0;
-                return _cb(tasks);
+                tasks.stop = 1;
+                _cb(tasks);
+                return;
             }
             tasks.mainWindow.setProgressBar(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt));
             if ((!tasks.waitQueue.length && !tasks.normalImgQueue.length) || tasks.runningNum >= tasks.multipleNum) return setTimeout(loop, 100);

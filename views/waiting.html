@@ -41,27 +41,13 @@
         <hr />
     </div>
     <div class="container-fluid" style="text-align: center">
-        <div class="progress" style="height: 5em;">
-            <div id="DowloadProgress" class="progress-bar progress-bar-striped" role="progressbar"
-                style="min-width: 1em;height: 5em; color: black;">
-                0 / 1
-            </div>
-        </div>
-        <div style="font-weight: bold;margin-top: 10%;font-size: 2em;">
-            <div style="border:3px solid blue;margin-bottom: calc(10%);">
-                <a id="DowloadTotal"> 0 / 1 </a>
-            </div>
-            <div style="border:3px solid green;margin-bottom: calc(10%);">
-                <a>Image : </a>
-                <a id="DowloadImage">1</a>
-            </div>
-            <div style="border:3px solid firebrick;">
-                <a>Error : </a>
-                <a id="DowloadError">1</a>
-            </div>
+        <a>waitting...</a>
+        <div class="input-group">
+            <button type="button" id="TasksContinue" class="btn btn-success" style="width: 100%;margin-top: 1%"
+                onclick="TasksContinue()">Continue</button>
         </div>
     </div>
 </body>
-<script src="./starting.js"></script>
+<script src="./waiting.js"></script>
 
 </html>

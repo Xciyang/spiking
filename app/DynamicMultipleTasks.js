@@ -3,9 +3,7 @@ Copyright © 2019 Ciyang. All rights reserved.
 */
 const request = require('request');
 const fs = require('fs');
-const ProgressBar = require('progress');
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+const { JSDOM } = require("jsdom");
 const MD5 = require("crypto-js/MD5");
 const puppeteer = require('puppeteer-core');
 const { TimeoutError } = require('puppeteer-core/Errors');
@@ -34,6 +32,7 @@ class DynamicMultipleTasks {
         this.displayWindow = true;
         this.chromePath = '';
         this.pageList = new Array();
+        this.stop = 1;
         try {
             this.firstUrl = new URL(url);
         } catch (e) {
@@ -82,6 +81,9 @@ class DynamicMultipleTasks {
     }
     setChromePath(path = '') {
         this.chromePath = path;
+    }
+    setMainWindow(mainWindow = new BrowserWindow()) {
+        this.mainWindow = mainWindow;
     }
     newPage() {
         return new Promise((resolve, reject) => {
@@ -275,20 +277,24 @@ class DynamicMultipleTasks {
         });
     }
     workMultiple(_cb) {
-        var bar = new ProgressBar(' progress [:bar] :now \\ :tot Image: :img Error: :err', {
-            complete: '=',
-            incomplete: ' ',
-            width: 25,
-            total: 25
-        });
+        this.stop = 0;
+        this.mainWindow.setProgressBar(2);
         var cnt = 0, cnt2 = 0, tasks = this;
         var loop = function () {
+            if (tasks.stop) return;
+            tasks.mainWindow.webContents.send('setProgress', {
+                a: cnt,
+                b: (tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt
+            });
+            tasks.mainWindow.webContents.send('setImageNum', cnt2);
+            tasks.mainWindow.webContents.send('setErrorNum', tasks.errorQueue.length);
             if (!tasks.runningNum && !tasks.waitQueue.length) {
-                bar.update(1, { now: cnt - tasks.errorQueue.length, tot: cnt, img: cnt2, err: tasks.errorQueue.length });
+                tasks.mainWindow.setProgressBar(-1);
+                tasks.stop = 1;
                 tasks.browser.close().then(res => { _cb(tasks); });
                 return;
             }
-            bar.update(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt), { now: cnt, tot: tasks.waitQueue.length + cnt, img: cnt2, err: tasks.errorQueue.length });
+            tasks.mainWindow.setProgressBar(cnt / ((tasks.waitQueue.length ? tasks.waitQueue.length : 1) + cnt));
             if ((!tasks.waitQueue.length && !tasks.normalImgQueue.length) || tasks.runningNum >= tasks.multipleNum) return setTimeout(loop, 100);
             var tmpy = Math.min(tasks.normalImgQueue.length, tasks.multipleNum);
             for (var i = 0; i < tmpy; i++) {
