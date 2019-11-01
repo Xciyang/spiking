@@ -3,12 +3,14 @@ Copyright © 2019 Ciyang. All rights reserved.
 */
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, Menu } = require('electron')
-const path = require('path')
+// const path = require('path')
 const { MultipleTasks } = require('./MultipleTasks')
+const { DynamicMultipleTasks } = require('./DynamicMultipleTasks')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let tasks
 
 function createWindow() {
   // Create the browser window.
@@ -24,7 +26,6 @@ function createWindow() {
     mainWindow.show()
   })
   // and load the index.html of the app.
-  mainWindow.loadFile('views/index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -35,7 +36,11 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
+    if (tasks) tasks.stop = 1;
   })
+
+  mainWindow.loadFile('views/index.html')
+
   // Menu.setApplicationMenu(null);
 
 }
@@ -61,6 +66,16 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+function TasksFinish() {
+  tasks = 0;
+  mainWindow.loadFile('views/index.html');
+}
+
+exports.TasksContinue = () => {
+  mainWindow.loadFile('views/starting.html');
+  tasks.workMultiple(TasksFinish);
+}
+
 /*
 {
   url: url,
@@ -69,27 +84,71 @@ app.on('activate', function () {
   proxy: lproxy
 }
 */
-
-function finish(tasks) {
-  
-}
-
 exports.MultipleStart = (data) => {
+  if (tasks) {
+    mainWindow.webContents.send('setError', 'Already starting.');
+    return;
+  }
   try {
-    var mt = new MultipleTasks(data.url);
-    mt.setMainWindow(mainWindow);
-    mt.setPath(data.path);
-    mt.setMultipleNum(data.concurrency);
-    mt.setProxy(data.proxy);
-    mainWindow.loadFile('views/starting.html')
-    mt.workMultiple(finish);
+    tasks = new MultipleTasks(data.url);
+    tasks.setMainWindow(mainWindow);
+    tasks.setPath(data.path);
+    tasks.setMultipleNum(data.concurrency);
+    tasks.setProxy(data.proxy);
+    mainWindow.loadFile('views/starting.html');
+    tasks.workMultiple(TasksFinish);
   } catch (err) {
-    tasks.mainWindow.webContents.send('setError', err.message);
+    tasks = 0;
+    mainWindow.webContents.send('setError', err.message);
   }
 }
+/*
+{
+  url: url,
+  path: lpath,
+  concurrency: concurrency,
+  chrome: lchrome,
+  display: ldisplay,
+  login: llogin
+}
+*/
 
-exports.DynamicStart = () => {
-
+exports.DynamicStart = (data) => {
+  if (tasks) {
+    mainWindow.webContents.send('setError', 'Already starting.');
+    return;
+  }
+  try {
+    tasks = new DynamicMultipleTasks(data.url);
+    tasks.setMainWindow(mainWindow);
+    tasks.setPath(data.path);
+    tasks.setMultipleNum(data.concurrency);
+    tasks.setProxy(data.proxy);
+    tasks.setChromePath(data.chrome);
+    tasks.setDisplay(data.display);
+    if (data.login) {
+      mainWindow.loadFile('views/waiting.html');
+      tasks.openBrowser().then(res => {
+        tasks.loadDynamically(tasks.firstUrl.href).then(res => {
+          mainWindow.webContents.send('setContinue');
+        }).catch(err => {
+          tasks = 0;
+          mainWindow.loadFile('views/index.html');
+          mainWindow.webContents.send('setError', err.message);
+        });
+      }).catch(err => {
+        tasks = 0;
+        mainWindow.loadFile('views/index.html');
+        mainWindow.webContents.send('setError', err.message);
+      });
+    } else {
+      mainWindow.loadFile('views/starting.html');
+      mt.workMultiple(TasksFinish);
+    }
+  } catch (err) {
+    tasks = 0;
+    mainWindow.webContents.send('setError', err.message);
+  }
 }
 
 exports.stopTask = () => {

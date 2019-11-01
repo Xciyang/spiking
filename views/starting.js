@@ -6,14 +6,28 @@ const ipcRenderer = require('electron').ipcRenderer;
 var DowloadProgress = document.getElementById('DowloadProgress');
 var DowloadImage = document.getElementById('DowloadImage');
 var DowloadError = document.getElementById('DowloadError');
+var DowloadTotal = document.getElementById('DowloadTotal');
+var Progress = { a: 1, b: 1 };
+var ImageNum = 0;
+var ErrorNum = 0;
 
 ipcRenderer.on('setProgress', (event, arg) => {
-    DowloadProgress.innerText = arg.a + ' / ' + arg.b;
-    DowloadProgress.style.width = arg.a / arg.b + '%';
+    Progress = arg;
 });
+
 ipcRenderer.on('setImageNum', (event, arg) => {
-    DowloadImage.innerText = arg;
+    ImageNum = arg;
 });
+
 ipcRenderer.on('setErrorNum', (event, arg) => {
-    DowloadError.innerText = arg;
+    ErrorNum = arg;
 });
+
+var inv = setInterval(() => {
+    DowloadImage.innerText = ImageNum;
+    DowloadError.innerText = ErrorNum;
+    DowloadProgress.innerText = Progress.a + ' / ' + Progress.b;
+    DowloadProgress.style.width = (Progress.a / Progress.b) + '%';
+    DowloadTotal.innerText = Progress.a + ' / ' + Progress.b;
+}, 100);
+

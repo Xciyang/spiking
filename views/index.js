@@ -3,7 +3,6 @@ Copyright © 2019 Ciyang. All rights reserved.
 */
 const main = require('electron').remote.require('../app/main');
 const ipcRenderer = require('electron').ipcRenderer;
-const path = require('path');
 
 function showMultipleContainer() {
     document.getElementById('ErrorMessage').style.display = 'none';
@@ -51,8 +50,6 @@ function MultipleStart() {
         setError(e.message);
         scrollTo(0, 0);
     }
-
-
 }
 function DynamicStart() {
     try {
@@ -75,11 +72,21 @@ function DynamicStart() {
         }
         var llogin = document.getElementById('basic-login').checked;
         if (llogin && !ldisplay) throw new Error('Please Display First.');
+
+        main.DynamicStart({
+            url: url,
+            path: lpath,
+            concurrency: concurrency,
+            proxy: lproxy,
+            chrome: lchrome,
+            display: ldisplay,
+            login: llogin
+        });
     } catch (e) {
         setError(e.message);
         scrollTo(0, 0);
     }
-    main.DynamicStart();
+
 }
 
 ipcRenderer.on('setError', (event, arg) => {
