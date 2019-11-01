@@ -9,9 +9,9 @@
 ![](https://img.shields.io/github/languages/code-size/Xciyang/spiking)
 ![](https://img.shields.io/github/repo-size/Xciyang/spiking)
 
-一个使用JavaScript开发的爬图工具。
+一个使用Node.js开发的通用爬图工具。
 
-A web crawler tool developed using JavaScript.
+A common web crawler tool developed using Node.js.
 
 ### 为什么选择它？(Advantage)
 
@@ -29,6 +29,8 @@ A web crawler tool developed using JavaScript.
 ```
 git clone https://github.com/Xciyang/spiking.git
 
+cd spiking
+
 npm install
 
 npm start
@@ -42,6 +44,6 @@ Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/mast
 
 ### 待完成项(To-do list)
 
+- 使用Electron框架 Using the electron frame
 - 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
-- 使用Electron框架 Using the electron frame
