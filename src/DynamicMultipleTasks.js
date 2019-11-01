@@ -342,6 +342,7 @@ class DynamicMultipleTasks {
         return;
     }
     close() {
+        tasks.browserRunning = 0;
         return this.browser.close();
     }
 }
