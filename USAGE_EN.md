@@ -1,29 +1,25 @@
 ## Usage
 
-Do the following after `start`.
+First select the crawl mode, `Multiple` for multi-line concurrent crawling, `DynamicMultiple` for dynamic web page concurrent crawling.
 
-`Input Way` Enter the crawl mode, `Multiple` is a multi-line concurrent crawl, `Dynamic` is a dynamic web crawl.
+`URL` Enter the link you want to crawl.
 
-`Input URL` Enter the link you want to crawl.
+`Local Path` Select local storage path.
 
-`Input Concurrency` Enter the maximum number of concurrency. This option is related to the crawl speed and is limited by the performance of the computer.
+`Concurrency` Enter the maximum number of concurrency. (This option is related to the crawl speed and is limited by the performance of the computer.)
 
-`Input Display Window` Enter whether to display the window.
+`Proxy` Enter the proxy address.
 
-`Input Use Proxy or Not` Enter whether to use a proxy.
+`Chormo Path` Select the Chormo browser executable file.
 
-`Input Proxy` Enter the proxy address.
+`Display` Select whether to display the browser window.
 
-`Input Chormo` Enter the Chormo browser executable file.
+`Login` Select whether you want to log in (please select the display first).
 
-`Input Chormo` Enter the Chormo browser executable file.
+If 'Login' is selected, the program will enter the wait and click 'Continue' to begin crawling.
 
-`Input Login or Not` Enter whether you want to log in.
-
-Then the crawl will start automatically.
-
-When everything is done you can retry the failed link request.
+Crawling is done automatically, and when everything is over, you can retry the failed link.
 
 ## More
 
-When you choose the `Dynamic` mode, you not only need to enter the correct proxy address in the program, but also need to change the IE proxy.
+When you choose the `DynamicMultiple` mode, you not only need to enter the correct proxy address in the program, but also need to change the IE proxy.
