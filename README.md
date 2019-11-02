@@ -39,6 +39,10 @@ npm start
 
 ### 用法(Usage)
 
+下载最新的[Release](https://github.com/Xciyang/spiking/releases)版本。
+
+Download the latest [Release] (https://github.com/Xciyang/spiking/releases) version.
+
 请阅读用法：[简体中文(zh_CN)](https://github.com/Xciyang/spiking/blob/master/USAGE.md)
 
 Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/master/USAGE_EN.md)
