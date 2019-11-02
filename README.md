@@ -15,8 +15,9 @@ A common web crawler tool developed using Node.js.
 
 ### 为什么选择它？(Advantage)
 
+- 图形化界面（使用Electron） Graphical Interface (Using Electron)
 - 自定义初始链接 Custom initial link
-- 无头浏览器支持（仅测试） Headless browser support (only test)
+- 无头浏览器支持 Headless browser support 
 - 并发/多线程 Concurrent / multithreaded
 - 高效爬取机制 Efficient crawling mechanism
 - 自动去重 Automatic similarity
@@ -44,6 +45,9 @@ Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/mast
 
 ### 待完成项(To-do list)
 
-- 使用Electron框架 Using the electron frame
 - 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
+
+### 更多(More)
+
+[Electron](https://github.com/electron/electron)
