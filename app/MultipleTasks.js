@@ -4,7 +4,6 @@ Copyright © 2019 Ciyang. All rights reserved.
 const request = require('request');
 const fs = require('fs');
 const { JSDOM } = require("jsdom");
-const crypto = require("crypto-js");
 const MD5 = require("crypto-js/md5");
 const { BrowserWindow } = require('electron')
 
@@ -28,11 +27,7 @@ class MultipleTasks {
         this.req = request.defaults();
         this.normalImgQueue = new Array();
         this.stop = 1;
-        try {
-            this.firstUrl = new URL(url);
-        } catch (e) {
-            console.log('URL parsing error.');
-        }
+        this.firstUrl = new URL(url);
         this.push(url);
     }
     push(url = '') {

@@ -323,6 +323,7 @@ class DynamicMultipleTasks {
             return setTimeout(loop, 100);
         };
         var initPage = function () {
+            if (tasks.pageList.length >= tasks.multipleNum) setTimeout(loop, 100);
             for (var i = tasks.pageList.length; i < tasks.multipleNum; i++) {
                 tasks.newPage().then(res2 => {
                     tasks.pageList.push(res2);

@@ -1,8 +1,32 @@
 /*
 Copyright © 2019 Ciyang. All rights reserved. 
 */
-const main = require('electron').remote.require('../app/main');
+
+const remote = require('electron').remote;
+const main = remote.require('../app/main');
+const Menu = remote.Menu;
+const MenuItem = remote.MenuItem;
 const ipcRenderer = require('electron').ipcRenderer;
+
+(function initMenu() {
+    const menu = new Menu();
+    menu.append(new MenuItem({ label: 'Paste(Ctrl + V)', role: 'paste' }));
+    window.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        if (isEleEditable(e.target)) menu.popup(remote.getCurrentWindow());
+    }, false);
+})();
+
+function isEleEditable(e) {
+    if (!e) {
+        return false;
+    }
+    if (e.tagName == 'INPUT' || e.contentEditable == 'true') {
+        return true;
+    } else {
+        return isEleEditable(e.parentNode)
+    }
+}
 
 function showMultipleContainer() {
     document.getElementById('ErrorMessage').style.display = 'none';
@@ -92,3 +116,4 @@ function DynamicStart() {
 ipcRenderer.on('setError', (event, arg) => {
     setError(arg);
 });
+
