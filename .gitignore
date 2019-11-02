@@ -34,8 +34,8 @@ build/Release
 
 # Dependency directories
 node_modules/
-.vscode/
 jspm_packages/
+package-lock.json
 
 # TypeScript v1 declaration files
 typings/
@@ -51,6 +51,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+/pack
 
 # Yarn Integrity file
 .yarn-integrity
@@ -60,4 +61,7 @@ typings/
 
 # next.js build output
 .next
-package-lock.json
+
+# vscode
+
+.vscode/

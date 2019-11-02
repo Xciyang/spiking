@@ -5,7 +5,7 @@
   "main": "app/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . Spiking --win --out ./win --arch=x64 --app-version=2.0.0 --electron-version=6.1.2 --download.mirror=https://npm.taobao.org/mirrors/electron/"
+    "build": "electron-packager ./  Spiking --out=./pack --all --asar --app-version=2.0.0 --electron-version=6.1.2 --appCopyright=\"Copyright © 2019 Ciyang. All rights reserved.\" --download.mirror=https://npm.taobao.org/mirrors/electron/ --ignore=\"(.gitignore|LICENSE|README.md)\" --overwrite"
   },
   "repository": {
     "type": "git",
@@ -13,18 +13,19 @@
   },
   "keywords": [
     "Electron",
-    "crawler",
-    "nodejs"
+    "nodejs",
+    "spiking",
+    "crawler"
   ],
   "author": "Ciyang",
   "license": "MPL-2.0",
   "homepage": "https://github.com/Xciyang/spiking#readme",
   "devDependencies": {
+    "electron": "^6.1.2",
     "electron-packager": "^14.1.0"
   },
   "dependencies": {
     "crypto-js": "^3.1.9-1",
-    "electron": "^6.1.2",
     "jsdom": "^15.2.0",
     "puppeteer-core": "^2.0.0"
   }

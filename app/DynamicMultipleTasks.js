@@ -4,7 +4,7 @@ Copyright © 2019 Ciyang. All rights reserved.
 const request = require('request');
 const fs = require('fs');
 const { JSDOM } = require("jsdom");
-const MD5 = require("crypto-js/MD5");
+const MD5 = require("crypto-js/md5");
 const puppeteer = require('puppeteer-core');
 const { TimeoutError } = require('puppeteer-core/Errors');
 
