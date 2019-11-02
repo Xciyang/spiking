@@ -4,7 +4,8 @@ Copyright © 2019 Ciyang. All rights reserved.
 const request = require('request');
 const fs = require('fs');
 const { JSDOM } = require("jsdom");
-const MD5 = require("crypto-js/MD5");
+const crypto = require("crypto-js");
+const MD5 = require("crypto-js/md5");
 const { BrowserWindow } = require('electron')
 
 function requestOpt() {
