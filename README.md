@@ -37,6 +37,15 @@ npm install
 npm start
 ```
 
+如果你在中国，存在一些致命的问题，使用淘宝镜像无法正常安装Electron@7.0.1。
+
+请先在`~/.npmrc`文件中加入以下内容，再进行`npm install`。
+
+```
+electron_mirror=https://npm.taobao.org/mirrors/electron/
+electron_custom_dir=7.0.1
+```
+
 ### 用法(Usage)
 
 下载最新的[Release](https://github.com/Xciyang/spiking/releases)版本。
@@ -50,6 +59,7 @@ Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/mast
 ### 待完成项(To-do list)
 
 - 语言本地化 Localization
+- 任务保存 Tasks Saving
 - 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
 
