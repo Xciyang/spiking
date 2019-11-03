@@ -49,6 +49,7 @@ Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/mast
 
 ### 待完成项(To-do list)
 
+- 语言本地化 Localization
 - 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
 
