@@ -41,7 +41,7 @@ function createWindow() {
 
   mainWindow.loadFile('views/index.html')
 
-  // Menu.setApplicationMenu(null);
+  Menu.setApplicationMenu(null);
 
 }
 
