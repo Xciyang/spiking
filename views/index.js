@@ -1,11 +1,12 @@
 /*
 Copyright © 2019 Ciyang. All rights reserved. 
 */
-
 const remote = require('electron').remote;
 const main = remote.require('../app/main');
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
+const dialog = remote.dialog;
+
 const ipcRenderer = require('electron').ipcRenderer;
 
 (function initMenu() {
@@ -59,7 +60,7 @@ function MultipleStart() {
     try {
         var url = document.getElementById('basic-url').value;
         if (!url) throw new Error('Please Input URL.');
-        var lpath = document.getElementById('basic-path').files[0] && document.getElementById('basic-path').files[0].path;
+        var lpath = (document.getElementById('basic-path-button').innerText != 'Choose Local Path') && document.getElementById('basic-path-button').innerText;
         if (!lpath) throw new Error('Please Choose Local Path.');
         var concurrency = parseInt(document.getElementById('basic-concurrency').value) || 0;
         if (!concurrency || concurrency <= 0) throw new Error('Please Input Right Concurrency.')
@@ -79,24 +80,16 @@ function DynamicStart() {
     try {
         var url = document.getElementById('basic-url').value;
         if (!url) throw new Error('Please Input URL.');
-        var lpath = document.getElementById('basic-path').files[0] && document.getElementById('basic-path').files[0].path;
+        var lpath = (document.getElementById('basic-path-button').innerText != 'Choose Local Path') && document.getElementById('basic-path-button').innerText;
         if (!lpath) throw new Error('Please Choose Local Path.');
         var concurrency = parseInt(document.getElementById('basic-concurrency').value) || 0;
         if (!concurrency || concurrency <= 0) throw new Error('Please Input Right Concurrency.')
-
         var lproxy = document.getElementById('basic-proxy').value;
-
         var lchrome = document.getElementById('basic-chrome').files[0] && document.getElementById('basic-chrome').files[0].path;
-
         if (!lchrome) throw new Error('Please Choose Chrome Path.');
-
         var ldisplay = document.getElementById('basic-display').checked;
-        if (ldisplay) {
-
-        }
         var llogin = document.getElementById('basic-login').checked;
         if (llogin && !ldisplay) throw new Error('Please Display First.');
-
         main.DynamicStart({
             url: url,
             path: lpath,
@@ -117,3 +110,17 @@ ipcRenderer.on('setError', (event, arg) => {
     setError(arg);
 });
 
+document.getElementById('basic-path-button').addEventListener("click", function () {
+    dialog.showOpenDialog({
+        properties: [
+            'openDirectory',
+        ],
+        filters: [
+            { name: 'All', extensions: ['*'] },
+        ]
+    }).then(res => {
+        if (res.filePaths[0]) {
+            document.getElementById('basic-path-button').innerText = res.filePaths[0];
+        }
+    })
+});

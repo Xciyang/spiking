@@ -71,30 +71,26 @@ function TasksFinish() {
     tasks.waitQueue = tasks.errorQueue;
     tasks.errorQueue = new Array();
   }
-  mainWindow.loadFile('views/waiting.html').then(res => {
+  mainWindow.loadFile('views/waiting.html').then(() => {
     mainWindow.webContents.send('setRetry', tasks.waitQueue.length);
   });
 }
 
 exports.TasksContinue = () => {
-  mainWindow.loadFile('views/starting.html').then(res => {
+  mainWindow.loadFile('views/starting.html').then(() => {
     tasks.workMultiple(TasksFinish);
   });
 }
 
 exports.TasksReturn = () => {
-  mainWindow.loadFile('views/index.html').then(res=>{
+  mainWindow.loadFile('views/index.html').then(() => {
     tasks = 0;
-  })
+    mainWindow.setProgressBar(-1);
+  });
 }
 
-/*
-{
-  url: url,
-  path: lpath,
-  concurrency: concurrency,
-  proxy: lproxy
-}
+/**
+ * data:{url,path,concurrency,proxy}
 */
 exports.MultipleStart = (data) => {
   if (tasks) {
@@ -107,7 +103,7 @@ exports.MultipleStart = (data) => {
     tasks.setPath(data.path);
     tasks.setMultipleNum(data.concurrency);
     tasks.setProxy(data.proxy);
-    mainWindow.loadFile('views/starting.html').then(res => {
+    mainWindow.loadFile('views/starting.html').then(() => {
       tasks.workMultiple(TasksFinish);
     });
   } catch (err) {
@@ -115,17 +111,9 @@ exports.MultipleStart = (data) => {
     mainWindow.webContents.send('setError', err.message);
   }
 }
-/*
-{
-  url: url,
-  path: lpath,
-  concurrency: concurrency,
-  chrome: lchrome,
-  display: ldisplay,
-  login: llogin
-}
+/**
+ *data:{url,path,concurrency,chrome,display,login}
 */
-
 exports.DynamicStart = (data) => {
   if (tasks) {
     mainWindow.webContents.send('setError', 'Already starting.');
@@ -140,9 +128,9 @@ exports.DynamicStart = (data) => {
     tasks.setChromePath(data.chrome);
     tasks.setDisplay(data.display);
     if (data.login) {
-      mainWindow.loadFile('views/waiting.html').then(res => {
-        tasks.openBrowser().then(res => {
-          tasks.loadDynamically(tasks.firstUrl.href).then(res => {
+      mainWindow.loadFile('views/waiting.html').then(() => {
+        tasks.openBrowser().then(() => {
+          tasks.loadDynamically(tasks.firstUrl.href).then(() => {
             mainWindow.webContents.send('setContinue');
           }).catch(err => {
             tasks = 0;
@@ -156,7 +144,7 @@ exports.DynamicStart = (data) => {
         });
       });
     } else {
-      mainWindow.loadFile('views/starting.html').then(res => {
+      mainWindow.loadFile('views/starting.html').then(() => {
         mt.workMultiple(TasksFinish);
       })
     }
@@ -165,7 +153,3 @@ exports.DynamicStart = (data) => {
     mainWindow.webContents.send('setError', err.message);
   }
 }
-
-/* exports.stopTask = () => {
-
-} */
