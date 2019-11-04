@@ -1,13 +1,13 @@
 # Spiking
 
-![](https://img.shields.io/github/issues/Xciyang/spiking)
-![](https://img.shields.io/github/forks/Xciyang/spiking)
+![](https://img.shields.io/github/watchers/Xciyang/spiking?label=watching)
 ![](https://img.shields.io/github/stars/Xciyang/spiking)
+![](https://img.shields.io/github/downloads/Xciyang/spiking/total)
+![](https://img.shields.io/github/v/release/Xciyang/spiking)
 ![](https://img.shields.io/github/license/Xciyang/spiking)
 ![](https://img.shields.io/github/languages/top/Xciyang/spiking)
-![](https://img.shields.io/github/last-commit/Xciyang/spiking)
 ![](https://img.shields.io/github/languages/code-size/Xciyang/spiking)
-![](https://img.shields.io/github/repo-size/Xciyang/spiking)
+[![](https://www.codefactor.io/repository/github/xciyang/spiking/badge/master)](https://www.codefactor.io/repository/github/xciyang/spiking/overview/master)
 
 一个使用Node.js开发的通用爬图工具。
 
