@@ -170,6 +170,16 @@ class DynamicMultipleTasks {
       })();
     });
   }
+  downloadingImg(url2 = '', path2 = '') {
+    var strem = fs.createWriteStream(path2);
+    if (strem) {
+      tasks.req.get(url2, function (error2) {
+        if (error2) setTimeout(downloadingImg, 50, url2, path2);
+      }).pipe(strem);
+    } else {
+      console.log('An unexpected error when downloading pictures, url : ' + url2);
+    }
+  }
   download(url = '') {
     if (this.urlSet.has(url)) return new Promise((resolve) => { resolve(3); });
     this.urlSet.add(url);
@@ -184,23 +194,13 @@ class DynamicMultipleTasks {
           }
           if (response.headers['content-type'].search('image') != -1) {
             resolve(2);
-            var downloadImg = function (url2 = '', path2 = '') {
-              var strem = fs.createWriteStream(path2);
-              if (strem) {
-                tasks.req.get(url2, function (error2) {
-                  if (error2) setTimeout(downloadImg, 50, url2, path2);
-                }).pipe(strem);
-              } else {
-                console.log('An unexpected error when downloading pictures, url : ' + url2);
-              }
-            }
             try {
               var upath = MD5(response.request.href).toString();
               var ctype = response.headers['content-type'];
               ctype = ctype.substr(ctype.indexOf('/') + 1);
               var res = ctype.indexOf(';');
               if (res != -1) ctype = ctype.substr(0, res - 1);
-              downloadImg(url, tasks.path + '/' + upath + '.' + ctype);
+              tasks.downloadingImg(url, tasks.path + '/' + upath + '.' + ctype);
             } catch (e) {
               console.log('An unexpected error when downloading pictures, url : ' + url);
             }
@@ -251,23 +251,13 @@ class DynamicMultipleTasks {
             return;
           }
           resolve(2);
-          var downloadImg = function (url2 = '', path2 = '') {
-            var strem = fs.createWriteStream(path2);
-            if (strem) {
-              tasks.req.get(url2, function (error2) {
-                if (error2) setTimeout(downloadImg, 50, url2, path2);
-              }).pipe(strem);
-            } else {
-              console.log('An unexpected error when downloading pictures, url : ' + url2);
-            }
-          }
           try {
             var upath = MD5(response.request.href).toString();
             var ctype = response.headers['content-type'];
             ctype = ctype.substr(ctype.indexOf('/') + 1);
             var res = ctype.indexOf(';');
             if (res != -1) ctype = ctype.substr(0, res - 1);
-            downloadImg(url, tasks.path + '/' + upath + '.' + ctype);
+            tasks.downloadingImg(url, tasks.path + '/' + upath + '.' + ctype);
           } catch (e) {
             console.log('An unexpected error when downloading pictures, url : ' + url);
           }
@@ -278,7 +268,7 @@ class DynamicMultipleTasks {
       });
     });
   }
-  workMultiple(callback = (res = new DynamicMultipleTasks()) => { }) {
+  workMultiple(callback) {
     this.stop = 0;
     this.mainWindow.setProgressBar(2);
     var cnt = 0, cnt2 = 0, tasks = this;
