@@ -5,7 +5,7 @@
   "main": "app/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager .  Spiking --out=./pack --all --asar --electron-version=6.1.2 --appCopyright=\"Copyright © 2019 Ciyang. All rights reserved.\" --download.mirror=https://npm.taobao.org/mirrors/electron/ --ignore=\"(.gitignore|LICENSE|README.md)\" --overwrite"
+    "build": "electron-packager . Spiking --out=./pack --all --asar --electron-version=7.0.1 --appCopyright=\"Copyright © 2019 Ciyang. All rights reserved.\" --download.mirror=https://npm.taobao.org/mirrors/electron/ --ignore=\"(.gitignore|LICENSE|README.md|USAGE.md|USAGE_EN.md)\" --overwrite"
   },
   "repository": {
     "type": "git",
