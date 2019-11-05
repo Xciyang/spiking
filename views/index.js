@@ -29,13 +29,13 @@ function isEleEditable(e) {
     }
 }
 
-function showMultipleContainer() {
+document.getElementById('MultipleRadio').onclick = function () {
     document.getElementById('ErrorMessage').style.display = 'none';
     document.getElementById('DynamicContainer').style.display = 'none';
     document.getElementById('MultipleContainer').style.display = '';
 }
 
-function showDynamicContainer() {
+document.getElementById('DynamicRadio').onclick = function () {
     document.getElementById('ErrorMessage').style.display = 'none';
     document.getElementById('MultipleContainer').style.display = 'none';
     document.getElementById('DynamicContainer').style.display = '';
@@ -56,7 +56,7 @@ function setError(st) {
     em.appendChild(b);
 }
 
-function MultipleStart() {
+document.getElementById('MultipleButton').onclick = function () {
     try {
         var url = document.getElementById('basic-url').value;
         if (!url) throw new Error('Please Input URL.');
@@ -76,7 +76,8 @@ function MultipleStart() {
         scrollTo(0, 0);
     }
 }
-function DynamicStart() {
+
+document.getElementById('DynamicButton').onclick = function () {
     try {
         var url = document.getElementById('basic-url').value;
         if (!url) throw new Error('Please Input URL.');

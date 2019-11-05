@@ -53,11 +53,11 @@
     </div>
     <div class="btn-group btn-group-sm input-group" data-toggle="buttons" style="width: 100%" id="basic-way">
       <label class="btn btn-primary">
-        <input type="radio" name="options" onclick="showMultipleContainer()">
+        <input type="radio" name="options" id="MultipleRadio">
         Multiple
       </label>
       <label class="btn btn-primary">
-        <input type="radio" name="options" onclick="showDynamicContainer()">
+        <input type="radio" name="options" id="DynamicRadio">
         DynamicMultiple
       </label>
     </div>
@@ -82,7 +82,7 @@
       <div class="container-fluid" id="MultipleContainer" style="display: none">
         <div class="input-group">
           <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
-            onclick="MultipleStart()">Start</button>
+            id="MultipleButton">Start</button>
         </div>
       </div>
       <div class="container-fluid" id="DynamicContainer" style="display: none">
@@ -107,7 +107,7 @@
         </div>
         <div class="input-group">
           <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
-            onclick="DynamicStart()">Start</button>
+            id="DynamicButton">Start</button>
         </div>
       </div>
     </div>

@@ -44,20 +44,21 @@
         <a>Waiting...</a>
         <div class="input-group">
             <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
-                onclick="TasksContinue()">Continue</button>
+                id="ContinueButton">Continue</button>
         </div>
     </div>
-    <div class="container-fluid" style="text-align: center;display: none" id="TasksRetry">
+    <div class=" container-fluid" style="text-align: center;display: none" id="TasksRetry">
         <a>Finished tasks, error num : </a><a id="ErrorNum"></a><a>. Retry ?</a>
         <div class="input-group">
             <button type="button" class="btn btn-info" style="width: 100%;margin-top: 1%"
-                onclick="TasksRetry()">Retry</button>
+                id="RetryButton">Retry</button>
         </div>
         <div class="input-group">
             <button type="button" class="btn btn-success" style="width: 100%;margin-top: 1%"
-                onclick="TasksReturn()">Return</button>
+                id="ReturnButton">Return</button>
         </div>
     </div>
 </body>
 <script src="./waiting.js"></script>
+
 </html>

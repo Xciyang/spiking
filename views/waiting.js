@@ -13,14 +13,14 @@ ipcRenderer.on('setRetry', (event, arg) => {
     document.getElementById('ErrorNum').innerText = arg;
 });
 
-function TasksContinue() {
+document.getElementById('ContinueButton').onclick = function () {
     main.TasksContinue();
 }
 
-function TasksRetry() {
+document.getElementById('RetryButton').onclick = function () {
     main.TasksContinue();
 }
 
-function TasksReturn() {
+document.getElementById('ReturnButton').onclick = function () {
     main.TasksReturn();
 }
