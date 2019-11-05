@@ -60,7 +60,6 @@ Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/mast
 
 - 语言本地化 Localization
 - 任务保存 Tasks Saving
-- 多种筛选方式 Multiple filtering methods
 - 自定义筛选方式 Custom filtering method
 
 ### 更多(More)

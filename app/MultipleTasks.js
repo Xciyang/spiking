@@ -91,7 +91,7 @@ class MultipleTasks {
             resolve(3);
             return;
           }
-          if (response.headers['content-type'].search('image') != -1) {
+          if (response.headers['content-type'] && response.headers['content-type'].search('image') != -1) {
             resolve(2);
             try {
               var upath = MD5(response.request.href).toString();
@@ -104,7 +104,7 @@ class MultipleTasks {
               console.log(`An unexpected error when downloading pictures, url : ${url} , error : ${e.message}`);
             }
           }
-          else if (response.headers['content-type'].search('text') != -1) {
+          else if (response.headers['content-type'] && response.headers['content-type'].search('text') != -1) {
             resolve(1);
             const dom = new JSDOM(body, {
               url: url,
@@ -143,7 +143,7 @@ class MultipleTasks {
     return new Promise((resolve, reject) => {
       tasks.req(url, requestOpt(), function (error, response) {
         if (!error && response.statusCode == 200) {
-          if (response.headers['content-type'].search('image') == -1) {
+          if (!response.headers['content-type'] || response.headers['content-type'].search('image') == -1) {
             tasks.urlSet.delete(url);
             tasks.push(url);
             resolve(3);

@@ -193,7 +193,7 @@ class DynamicMultipleTasks {
             resolve(3);
             return;
           }
-          if (response.headers['content-type'].search('image') != -1) {
+          if (response.headers['content-type'] && response.headers['content-type'].search('image') != -1) {
             resolve(2);
             try {
               var upath = MD5(response.request.href).toString();
@@ -206,7 +206,7 @@ class DynamicMultipleTasks {
               console.log(`An unexpected error when downloading pictures, url : ${url} , error : ${e.message}`);
             }
           }
-          else if (response.headers['content-type'].search('text') != -1) {
+          else if (response.headers['content-type'] && response.headers['content-type'].search('text') != -1) {
             tasks.loadDynamically(url).then(res => {
               resolve(1);
               var dom = new JSDOM(res);
@@ -245,7 +245,7 @@ class DynamicMultipleTasks {
     return new Promise((resolve, reject) => {
       tasks.req(url, requestOpt(), function (error, response) {
         if (!error && response.statusCode == 200) {
-          if (response.headers['content-type'].search('image') == -1) {
+          if (!response.headers['content-type'] || response.headers['content-type'].search('image') == -1) {
             tasks.urlSet.delete(url);
             tasks.push(url);
             resolve(3);
