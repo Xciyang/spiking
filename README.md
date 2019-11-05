@@ -42,8 +42,8 @@ npm start
 请先在`~/.npmrc`文件中加入以下内容，再进行`npm install`。
 
 ```
-electron_mirror=https://npm.taobao.org/mirrors/electron/
-electron_custom_dir=7.0.1
+npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
+npm config set electron_custom_dir=7.0.1
 ```
 
 ### 用法(Usage)
