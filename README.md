@@ -43,7 +43,7 @@ npm start
 
 ```
 npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
-npm config set electron_custom_dir=7.0.1
+npm config set electron_custom_dir=7.1.0
 ```
 
 ### 用法(Usage)
