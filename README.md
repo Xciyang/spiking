@@ -37,13 +37,13 @@ npm install
 npm start
 ```
 
-如果你在中国，存在一些致命的问题，使用淘宝镜像无法正常安装Electron@7.0.1。
+如果你在中国，使用淘宝镜像可能会无法正常安装Electron。
 
-请先在`~/.npmrc`文件中加入以下内容，再进行`npm install`。
+请先在`~/.npmrc`文件中加入以下内容，electron_custom_dir设置为当前版本，如`7.1.1`，再进行`npm install`。
 
 ```
 npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
-npm config set electron_custom_dir=7.1.0
+npm config set electron_custom_dir=X.X.X
 ```
 
 ### 用法(Usage)
