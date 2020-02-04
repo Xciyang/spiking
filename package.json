@@ -21,7 +21,7 @@
   "license": "MPL-2.0",
   "homepage": "https://github.com/Xciyang/spiking#readme",
   "devDependencies": {
-    "electron": "^7.0.1",
+    "electron": "^8.0.0",
     "electron-packager": "^14.1.0"
   },
   "dependencies": {
