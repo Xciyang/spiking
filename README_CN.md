@@ -38,7 +38,7 @@ npm start
 
 使用淘宝镜像可能会无法正常安装Electron。
 
-请先在`~/.npmrc`文件中加入以下内容，electron_custom_dir设置为当前版本，如`8.2.3`，再进行`npm install`。
+请先在`~/.npmrc`文件中加入以下内容，electron_custom_dir设置为当前版本，如`8.0.0`，再进行`npm install`。
 
 ```
 npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/

@@ -1,11 +1,11 @@
 {
   "name": "spiking",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A lightweight web crawler.",
   "main": "app/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-packager . Spiking --out=./pack --all --asar --electron-version=7.0.1 --appCopyright=\"Copyright © 2019 Ciyang. All rights reserved.\" --download.mirror=https://npm.taobao.org/mirrors/electron/ --ignore=\"(.gitignore|LICENSE|README.md|USAGE.md|USAGE_EN.md)\" --overwrite"
+    "build": "electron-packager . Spiking --out=../pack --all --asar --electron-version=8.0.0 --appCopyright=\"Copyright © 2019 Ciyang. All rights reserved.\" --download.mirror=https://npm.taobao.org/mirrors/electron/ --ignore=\"(.gitignore|LICENSE|README.md|USAGE.md|USAGE_EN.md)\" --overwrite"
   },
   "repository": {
     "type": "git",
