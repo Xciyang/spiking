@@ -145,7 +145,7 @@ exports.DynamicStart = (data) => {
       });
     } else {
       mainWindow.loadFile('views/starting.html').then(() => {
-        mt.workMultiple(TasksFinish);
+        tasks.workMultiple(TasksFinish);
       })
     }
   } catch (err) {
