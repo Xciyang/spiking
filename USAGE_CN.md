@@ -10,7 +10,7 @@
 
 `Proxy`输入代理地址。
 
-`Chormo Path`选择Chormo浏览器的可执行文件。
+`Chormo Path`选择Chormo（chromium）浏览器的可执行文件。
 
 `Display`选择是否显示浏览器窗口。
 
@@ -24,3 +24,4 @@
 
 当你选择`DynamicMultiple`时，不仅需要在程序中输入正确的代理地址，还需更改IE代理。
 
+[此处](https://npm.taobao.org/mirrors/chromium-browser-snapshots/)为chromium的淘宝镜像，请选择适用的版本进行下载。

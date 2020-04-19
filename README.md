@@ -1,5 +1,7 @@
 # Spiking
 
+[Chinese](https://github.com/Xciyang/spiking/blob/master/README_CN.md) | English
+
 ![](https://img.shields.io/github/watchers/Xciyang/spiking?label=watching)
 ![](https://img.shields.io/github/stars/Xciyang/spiking)
 ![](https://img.shields.io/github/downloads/Xciyang/spiking/total)
@@ -9,23 +11,20 @@
 ![](https://img.shields.io/github/languages/code-size/Xciyang/spiking)
 [![](https://www.codefactor.io/repository/github/xciyang/spiking/badge/master)](https://www.codefactor.io/repository/github/xciyang/spiking/overview/master)
 
-一个使用Node.js开发的通用爬图工具。
-
 A common web crawler tool developed using Node.js.
 
-### 为什么选择它？(Advantage)
+### Advantage
 
-- 图形化界面（使用Electron） Graphical Interface (Using Electron)
-- 自定义初始链接 Custom initial link
-- 无头浏览器支持 Headless browser support 
-- 并发/多线程 Concurrent / multithreaded
-- 高效爬取机制 Efficient crawling mechanism
-- 自动去重 Automatic similarity
-- 可调控的爬取速度 Adjustable crawling speed
-- 进度可视化 Progress visualization
-- 使用代理 Using a proxy
+- Graphical Interface (Electron)
+- Custom initial link
+- Headless browser support (puppeteer)
+- Concurrent / multithreaded
+- Efficient crawling mechanism
+- Automatic similarity
+- Progress visualization
+- Using a proxy
 
-### 开始(Getting started)
+### Getting started
 
 ```
 git clone https://github.com/Xciyang/spiking.git
@@ -37,31 +36,20 @@ npm install
 npm start
 ```
 
-如果你在中国，使用淘宝镜像可能会无法正常安装Electron。
-
-请先在`~/.npmrc`文件中加入以下内容，electron_custom_dir设置为当前版本，如`7.1.1`，再进行`npm install`。
-
-```
-npm config set electron_mirror=https://npm.taobao.org/mirrors/electron/
-npm config set electron_custom_dir=X.X.X
-```
-
-### 用法(Usage)
-
-下载最新的[Release](https://github.com/Xciyang/spiking/releases)版本。
+### Usage
 
 Download the latest [Release] (https://github.com/Xciyang/spiking/releases) version.
 
-请阅读用法：[简体中文(zh_CN)](https://github.com/Xciyang/spiking/blob/master/USAGE.md)
-
 Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/master/USAGE_EN.md)
 
-### 待完成项(To-do list)
+### To-do list
 
-- 语言本地化 Localization
-- 任务保存 Tasks Saving
-- 自定义筛选方式 Custom filtering method
+- Localization
+- Tasks Saving
+- Custom filtering method
 
-### 更多(More)
+### More
 
 [Electron](https://github.com/electron/electron)
+
+[puppeteer](https://github.com/puppeteer/puppeteer)
