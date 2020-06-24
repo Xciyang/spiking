@@ -27,7 +27,7 @@
   "dependencies": {
     "crypto-js": "^4.0.0",
     "jsdom": "^16.0.0",
-    "puppeteer-core": "^3.0.0",
+    "puppeteer-core": "^4.0.1",
     "minimist": "^1.2.3"
   }
 }
