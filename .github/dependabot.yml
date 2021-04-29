@@ -1,0 +1,31 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  labels:
+  - Dependabot
+  versioning-strategy: increase-if-necessary
+  ignore:
+  - dependency-name: electron
+    versions:
+    - 11.3.0
+    - 12.0.0
+    - 12.0.1
+    - 12.0.2
+    - 12.0.3
+    - 12.0.4
+  - dependency-name: jsdom
+    versions:
+    - 16.5.0
+    - 16.5.1
+    - 16.5.2
+  - dependency-name: puppeteer-core
+    versions:
+    - 6.0.0
+    - 7.0.0
+    - 7.0.3
+    - 7.0.4
+    - 8.0.0
