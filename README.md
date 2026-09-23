@@ -1,3 +1,5 @@
+
+
 # Spiking
 
 [Chinese](https://github.com/Xciyang/spiking/blob/master/README_CN.md) | English
@@ -38,7 +40,7 @@ npm start
 
 ### Usage
 
-Download the latest [Release] (https://github.com/Xciyang/spiking/releases) version.
+Download the latest [Release](https://github.com/Xciyang/spiking/releases) version.
 
 Please read usage: [English(en_US)](https://github.com/Xciyang/spiking/blob/master/USAGE_EN.md)
 
